@@ -67,6 +67,7 @@ flutter pub add localdb
   <details>
 
   ```dart
+  import 'dart:io';
   import 'package:localdb/jsondb.dart';
   import 'package:localdb/file/file.dart';
   import 'package:localdb/javascript/javascript.dart';

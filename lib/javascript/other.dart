@@ -26,30 +26,30 @@ getCountry([value = "id", typedData = "code"]) {
   var json = {"status": "bad"};
   var type = typedData.toString().toLowerCase();
   for (var i = 0; i < country.length; i++) {
-    var loop_data = country[i];
+    var loopData = country[i];
     if (type == "code") {
-      var code = loop_data["code"].toString().toLowerCase();
+      var code = loopData["code"].toString().toLowerCase();
       if (code == value) {
-        loop_data["status"] = "ok";
-        return loop_data;
+        loopData["status"] = "ok";
+        return loopData;
       }
     } else if (type == "flag") {
-      var flag = loop_data["flag"];
+      var flag = loopData["flag"];
       if (flag == value) {
-        loop_data["status"] = "ok";
-        return loop_data;
+        loopData["status"] = "ok";
+        return loopData;
       }
     } else if (type == "name") {
-      var flag = loop_data["name"].toString().toLowerCase();
+      var flag = loopData["name"].toString().toLowerCase();
       if (flag == value) {
-        loop_data["status"] = "ok";
-        return loop_data;
+        loopData["status"] = "ok";
+        return loopData;
       }
     } else if (type == "phone_number") {
-      var flag = loop_data["dial_code"];
+      var flag = loopData["dial_code"];
       if (flag == value) {
-        loop_data["status"] = "ok";
-        return loop_data;
+        loopData["status"] = "ok";
+        return loopData;
       }
     } else {
       return "Saya Tidak type data tersebut";
@@ -88,4 +88,13 @@ validemail(text) {
     json["description"] = "PLease Fill text in parameters";
     return json;
   }
+}
+
+// ignore: non_constant_identifier_names
+acces_data(data, checkUser) {
+    if (data.indexOf(checkUser) > -1) {
+        return true;
+    } else {
+        return false;
+    }
 }

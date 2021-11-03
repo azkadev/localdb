@@ -27,13 +27,13 @@ class jsondb {
   // ignore: prefer_typing_uninitialized_variables
   var states;
   jsondb(this.db) {
-    data = db.data();
+    data = JSON.parse(db.data());
   }
 
   //--! Complete 100%
   jsondb defaults(value) {
     if (ifjs(value)) {
-      var json = {};
+      Map json = {};
       if (typeof(value) == "string") {
         for (var i = 0; i < value.toString().length; i++) {
           var loopData = value[i];
@@ -178,7 +178,7 @@ class jsondb {
     if (!ifjs(stateDataFile)) {
       stateDataFile = data ?? {};
     }
-    return db.create(stateDataFile);
+    return db.create(JSON.stringify(stateDataFile, null, 2));
   }
 
   valueprintPretty() {
@@ -194,9 +194,9 @@ class jsondb {
         }
       } else {
         try {
-          print(JSON.stringify(db.data(), null, 2));
+          print(JSON.stringify(JSON.parse(db.data()), null, 2));
         } catch (e) {
-          print(db.data());
+          print(JSON.parse(db.data()));
         }
       }
     } else {
