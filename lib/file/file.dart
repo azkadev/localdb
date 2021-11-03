@@ -1,6 +1,7 @@
 import 'dart:io';
 import '../javascript/javascript.dart';
 import '../javascript/other.dart';
+import '../javascript/tanggal.dart';
 
 var listExtensionSupport = ["json", "yaml", "txt", "text"];
 
@@ -73,8 +74,7 @@ class FileSync {
     if (RegExp(".*\/", caseSensitive: false).hasMatch(pathFile)) {
       var splitText = pathFile.toString().split(".");
       if (splitText.length > 1) {
-        if (checkExtenstion(
-            splitText.last.toString().toLowerCase())) {
+        if (checkExtenstion(splitText.last.toString().toLowerCase())) {
           if (File(pathFile).existsSync()) {
             var getFile = File(pathFile).readAsStringSync();
             if (ifjs(getFile)) {
@@ -116,4 +116,76 @@ class FileSync {
       throw ("PLease Add correct path file");
     }
   }
+
+  info() {
+    Map json = {};
+    if (RegExp(".*\/", caseSensitive: false).hasMatch(pathFile)) {
+      if (pathFile.toString().split(".").length > 1) {
+        if (File(pathFile).existsSync()) {
+          var dateCreated =
+              tanggal(File(pathFile).lastAccessedSync().millisecondsSinceEpoch);
+          var dateUpdate =
+              tanggal(File(pathFile).lastModifiedSync().millisecondsSinceEpoch);
+          var stat = File(pathFile).statSync();
+          json["date_created"] = dateCreated;
+          json["date_update"] = dateUpdate;
+          json["detail"] = {
+            "accessed": stat.accessed.toString(),
+            "changed": stat.changed.toString(),
+            "mode": stat.modeString().toString(),
+            "modified": stat.modified.toString(),
+            "size": stat.size.toInt(),
+            "type": stat.type.toString()
+          };
+          return json;
+        } else {
+          File(pathFile).createSync();
+          var dateCreated =
+              tanggal(File(pathFile).lastAccessedSync().millisecondsSinceEpoch);
+          var dateUpdate =
+              tanggal(File(pathFile).lastModifiedSync().millisecondsSinceEpoch);
+          var stat = File(pathFile).statSync();
+          json["date_created"] = dateCreated;
+          json["date_update"] = dateUpdate;
+          json["detail"] = {
+            "accessed": stat.accessed.toString(),
+            "changed": stat.changed.toString(),
+            "mode": stat.modeString().toString(),
+            "modified": stat.modified.toString(),
+            "size": stat.size.toInt(),
+            "type": stat.type.toString()
+          };
+          return json;
+        }
+      } else {
+        throw ("PLease Add json in last text");
+      }
+    } else {
+      throw ("PLease Add correct path file");
+    }
+  }
+
+  rename(newPathFile) {
+    if (newPathFile.toString().isNotEmpty) {
+      File(pathFile).renameSync(newPathFile);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  copy(newPathFile) {
+    if (newPathFile.toString().isNotEmpty) {
+      File(pathFile).copySync(newPathFile);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  delete() {
+    File(pathFile).deleteSync();
+    return true;
+  }
+
 }
