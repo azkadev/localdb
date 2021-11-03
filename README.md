@@ -1,4 +1,4 @@
-# JSONDB
+# LOCAL DB
 
 <p align="center">
   <img src="/assets/icons/logo.png" />
@@ -68,9 +68,9 @@ flutter pub add jsondb
 ##### Quickstart
 - Synchronius
 ```dart
-import 'dart:io';
-import "package:jsondb/jsondb.dart";
-import 'package:jsondb/db.dart';
+import "package:localdb/jsondb.dart";
+import 'package:localdb/db.dart';
+import 'package:localdb/javascript/javascript.dart';
 
 void main() {
   var db = jsondb(FileSync("${Directory.current.path}/azkadev.json"));
@@ -162,8 +162,9 @@ void main() {
 - Asynchronius
 ```dart
 import 'dart:io';
-import "package:jsondb/jsondb.dart";
-import 'package:jsondb/db.dart';
+import "package:localdb/jsondb.dart";
+import 'package:localdb/db.dart';
+import 'package:localdb/javascript/javascript.dart';
 
 void main() {
   var db = jsondb(await FileAsync("${Directory.current.path}/azkadev.json"));
