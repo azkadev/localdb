@@ -1,9 +1,5 @@
 # LOCAL DB
 
-<p align="center">
-  <img src="/assets/icons/logo.png" />
-</p>
-
 ---
 
 # Sosial Media
@@ -44,11 +40,11 @@
 
 # Introduction
 
-**ID**: JsonDb adalah library untuk mempermudah dalam membuat database local dan saat ini hanya support json.
+**ID**: localdb adalah library untuk mempermudah dalam membuat database local.
 
 Saya membuat library ini karena terinspirasi dari library [lowdb](https://github.com/typicode/lowdb).
 
-**EN**: JsonDb is a library to make it easier to create local databases and currently only supports json.
+**EN**: localdb is a library to make it easier to create local databases.
 
 I created this library because it was inspired by the lirbary [lowdb](https://github.com/typicode/lowdb).
 
@@ -62,195 +58,119 @@ I created this library because it was inspired by the lirbary [lowdb](https://gi
 
 ##### Install Library
 ```bash
-flutter pub add jsondb
+flutter pub add localdb
 ```
 
 ##### Quickstart
-- Synchronius
-```dart
-import "package:localdb/jsondb.dart";
-import 'package:localdb/db.dart';
-import 'package:localdb/javascript/javascript.dart';
 
-void main() {
-  var db = jsondb(FileSync("${Directory.current.path}/azkadev.json"));
+- jsondb
+  <details>
+
+  ```dart
+  import 'package:localdb/jsondb.dart';
+  import 'package:localdb/file/file.dart';
+  import 'package:localdb/javascript/javascript.dart';
+
+  void main() {
+    var db = jsondb(FileSync("${Directory.current.path}/azkadev.json"));
   
-  db.defaults({
-    "name": "jsondb",
-    "version": "0.0.0",
-    "links": {
-      "repository": "https://github.com/azkadev/jsondb.git",
-      "library": "",
-      "quickstart_app": ""
-    },
-    "contributors": [
-      {"username": "azkadev", "country": "id"}
-    ],
-    "post": [
-      {
-        "id": 1,
-        "title": "Library v1",
-        "data": "Lorepsum ipsum dipsum gatau lagi lanjutanya",
-        "comment": [
-          {
-            "id": 1,
-            "username": "azkadev",
-            "country": "id",
-            "data": "wow library local database json"
-          },
-          {
-            "id": 2,
-            "username": "github",
-            "country": "id",
-            "data": "wow library please update more",
-            "reply": [
-              {
-                "id": 1,
-                "username": "azkadev",
-                "country": "id",
-                "reply_to_message": "owner",
-                "data": "ok brow i will update next"
-              },
-              {
-                "id": 1,
-                "username": "github",
-                "country": "id",
-                "data": "wow thanks",
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }).write();
+    db.defaults({
+      "name": "jsondb",
+      "version": "0.0.0",
+      "links": {
+        "repository": "https://github.com/azkadev/jsondb.git",
+        "library": "",
+        "quickstart_app": ""
+      },
+      "contributors": [
+          {"username": "azkadev", "country": "id"}
+      ],
+      "post": [
+        {
+          "id": 1,
+          "title": "Library v1",
+          "data": "Lorepsum ipsum dipsum gatau lagi lanjutanya",
+          "comment": [
+            {
+              "id": 1,
+              "username": "azkadev",
+              "country": "id",
+              "data": "wow library local database json"
+            },
+            {
+              "id": 2,
+              "username": "github",
+              "country": "id",
+              "data": "wow library please update more",
+              "reply": [
+                {
+                  "id": 1,
+                  "username": "azkadev",
+                  "country": "id",
+                  "reply_to_message": "owner",
+                  "data": "ok brow i will update next"
+                },
+                {
+                  "id": 1,
+                  "username": "github",
+                  "country": "id",
+                  "data": "wow thanks",
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }).write();
 
-  //--! add data
-  var jsonData = {
+    //--! add data
+    var jsonData = {
       "id": 2,
       "title": "Library v2",
       "data": "Lorepsum ipsum dipsum gatau lagi lanjutanya"
-  };
-  // get data from key post and from object key title
-  var getData = db.get("post").find({"title": "Update v2"}).value();
-  // check data
-  if (ifjs(getData)) {
-    // update data
-    jsonData["title"] = "new Update";
-    db.get("post").find({"title": "Update v2"}).assign(jsonData).value();
-  } else {
-    // add new data
-    db.get("post").push(jsonData).write();
+    };
+    // get data from key post and from object key title
+    var getData = db.get("post").find({"title": "Update v2"}).value();
+    // check data
+    if (ifjs(getData)) {
+      // update data
+      jsonData["title"] = "new Update";
+      db.get("post").find({"title": "Update v2"}).assign(jsonData).value();
+    } else {
+      // add new data
+      db.get("post").push(jsonData).write();
+    }
+  
+    //--! Find Data
+    db.get("contributors").push({
+      "username": "github", "country": "en"
+    }).write();
+
+    //--! Find Data
+    var findData = db.get("contributors").find({"username": "azkadev" }).value();
+    print(findData)
+
+    // set data
+    db.set("key.data", { "github": "azkak" }).write();
+
+    //--! Print all dat
+    print(db.value());
   }
-  
-  //--! Find Data
-  db.get("contributors").push({
-    "username": "github", "country": "en"
-  }).write();
+  ```
 
-  //--! Find Data
-  var findData = db.get("contributors").find({ "username": "azkadev" }).value();
-  print(findData)
-
-  // set data
-  db.set("key.data", { "github": "azkak" }).write();
-
-  //--! Print all dat
-  print(db.value());
-}
-```
-
-- Asynchronius
-```dart
-import 'dart:io';
-import "package:localdb/jsondb.dart";
-import 'package:localdb/db.dart';
-import 'package:localdb/javascript/javascript.dart';
-
-void main() {
-  var db = jsondb(await FileAsync("${Directory.current.path}/azkadev.json"));
-  
-  db.defaults({
-    "name": "jsondb",
-    "version": "0.0.0",
-    "links": {
-      "repository": "https://github.com/azkadev/jsondb.git",
-      "library": "",
-      "quickstart_app": ""
-    },
-    "contributors": [
-      {"username": "azkadev", "country": "id"}
-    ],
-    "post": [
-      {
-        "id": 1,
-        "title": "Library v1",
-        "data": "Lorepsum ipsum dipsum gatau lagi lanjutanya",
-        "comment": [
-          {
-            "id": 1,
-            "username": "azkadev",
-            "country": "id",
-            "data": "wow library local database json"
-          },
-          {
-            "id": 2,
-            "username": "github",
-            "country": "id",
-            "data": "wow library please update more",
-            "reply": [
-              {
-                "id": 1,
-                "username": "azkadev",
-                "country": "id",
-                "reply_to_message": "owner",
-                "data": "ok brow i will update next"
-              },
-              {
-                "id": 1,
-                "username": "github",
-                "country": "id",
-                "data": "wow thanks",
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }).write();
-
-  //--! add data
-  var jsonData = {
-      "id": 2,
-      "title": "Library v2",
-      "data": "Lorepsum ipsum dipsum gatau lagi lanjutanya"
-  };
-  // get data from key post and from object key title
-  var getData = db.get("post").find({"title": "Update v2"}).value();
-  // check data
-  if (ifjs(getData)) {
-    // update data
-    jsonData["title"] = "new Update";
-    db.get("post").find({"title": "Update v2"}).assign(jsonData).value();
-  } else {
-    // add new data
-    db.get("post").push(jsonData).write();
-  }
-  
-  //--! Find Data
-  db.get("contributors").push({
-    "username": "github", "country": "en"
-  }).write();
-
-  //--! Find Data
-  var findData = db.get("contributors").find({ "username": "azkadev" }).value();
-  print(findData)
-
-  // set data
-  db.set("key.data", { "github": "azkak" }).write();
-
-  //--! Print all dat
-  print(db.value());
-```
+  </details>
+  <br>
+- yamldb
+  <details>
+  </details>
+  <br>
+- csvdb
+  <details>
+  </details>
+  <br>
+- xmldb
+  <details>
+  </details>
 
 ---
 <br>

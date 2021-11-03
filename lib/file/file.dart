@@ -1,6 +1,5 @@
 import 'dart:io';
-
-import 'javascript/javascript.dart';
+import '../javascript/javascript.dart';
 
 
 class FileAsync {
