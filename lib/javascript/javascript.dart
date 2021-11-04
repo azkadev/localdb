@@ -136,6 +136,8 @@ ifjs(data) {
     } else {
       return false;
     }
+  } else if (check == "bool") {
+    return data;
   } else {
     return false;
   }
