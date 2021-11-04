@@ -10,6 +10,11 @@ var stateDataGet;
 var stateFromGet;
 // ignore: prefer_typing_uninitialized_variables
 var stateDataValue;
+// ignore: prefer_typing_uninitialized_variables
+var stateDataFind;
+
+// ignore: prefer_typing_uninitialized_variables
+var stateSearchFind;
 
 var boolFromGet = false;
 var boolFromPush = false;
@@ -200,7 +205,10 @@ class _gets {
       if (ifjs(dataFind) && typeof(dataFind) == "object") {
         boolFromFind = true;
         if (typeof(stateDataValue) == "list") {
-          stateDataValue = findObjectinArray(stateDataValue, dataFind);
+          stateDataFind = stateDataValue;
+          stateSearchFind = dataFind;
+          var getData = findObjectinArray(stateDataValue, dataFind);
+          stateDataValue = getData;
         } else {
           stateDataValue = null;
         }
@@ -253,7 +261,9 @@ class _finds {
       stateDataFile = _data ?? {};
     }
     if (typeof(stateDataValue) == "object" && typeof(dataAssign) == "object") {
-      replaceObjectInArray(array, object, newobject);
+      if (typeof(stateDataFind) == "list" && stateDataGet != null) {
+        stateDataFile[stateDataGet.toString()] = replaceObjectInArray(stateDataFind, stateSearchFind, dataAssign);
+      }
     }
     boolFromAssign = true;
     return _lastwrite(_db);

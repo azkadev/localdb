@@ -2,10 +2,17 @@
   "aza": "baru",
   "array": [
     {
-      "key": "azka"
+      "key": "azka",
+      "as": "AS",
+      "azka": "gantengt",
+      "oksa": "skaoaskoksoa"
     },
     {
-      "key": "lupa"
+      "key": "lupa",
+      "azka": "gantengt",
+      "oksa": [
+        "skaoaskoksoa"
+      ]
     }
   ],
   "json": {},
