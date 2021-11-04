@@ -12,9 +12,7 @@ void main() async {
   runApp(
     MaterialApp(
       title: 'Reading and Writing Files',
-      home: FlutterDemo(
-        database: jsondb(FileSync("$pathApp/db.json")),
-      ),
+      home: Center(child: Text("$pathApp/data.json"),),
     ),
   );
 }
