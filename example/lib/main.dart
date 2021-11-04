@@ -38,7 +38,7 @@ class _FlutterDemoState extends State<FlutterDemo> {
   @override
   void initState() {
     super.initState();
-    widget.database.defaults({"counter": 123456}).write();
+    widget.database.defaults({"counter": 0}).write();
     setState(() {
       try {
         _counter = widget.database.get("counter").value() ?? 0;
@@ -64,6 +64,7 @@ class _FlutterDemoState extends State<FlutterDemo> {
           setState(() {
             _counter++;
           });
+          widget.database.set("counter", _counter).write();
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),

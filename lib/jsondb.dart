@@ -1,7 +1,4 @@
-import 'package:localdb/jsondb.dart';
-
 import 'javascript/javascript.dart';
-
 // ignore: prefer_typing_uninitialized_variables
 var stateDataFile;
 // ignore: prefer_typing_uninitialized_variables
