@@ -1,212 +1,99 @@
+import 'dart:async';
 import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:localdb/javascript/javascript.dart';
-import 'package:localdb/javascript/tanggal.dart';
-import 'package:localdb/jsondb.dart';
-import 'package:localdb/file/file.dart';
-import "package:localdb/javascript/other.dart";
 
 void main() {
   runApp(
     MaterialApp(
-      title: 'Path Provider',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Path Provider'),
+      title: 'Reading and Writing Files',
+      home: FlutterDemo(storage: CounterStorage()),
     ),
   );
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
+class CounterStorage {
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
 
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/counter.txt');
+  }
+
+  Future<int> readCounter() async {
+    try {
+      final file = await _localFile;
+
+      // Read the file
+      final contents = await file.readAsString();
+
+      return int.parse(contents);
+    } catch (e) {
+      // If encountering an error, return 0
+      return 0;
+    }
+  }
+
+  Future<File> writeCounter(int counter) async {
+    final file = await _localFile;
+
+    // Write the file
+    return file.writeAsString('$counter');
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  Future<Directory?>? _tempDirectory;
-  Future<Directory?>? _appSupportDirectory;
-  Future<Directory?>? _appLibraryDirectory;
-  Future<Directory?>? _appDocumentsDirectory;
-  Future<Directory?>? _externalDocumentsDirectory;
-  Future<List<Directory>?>? _externalStorageDirectories;
-  Future<List<Directory>?>? _externalCacheDirectories;
+class FlutterDemo extends StatefulWidget {
+  const FlutterDemo({Key? key, required this.storage}) : super(key: key);
 
-  void _requestTempDirectory() {
-    setState(() {
-      _tempDirectory = getTemporaryDirectory();
+  final CounterStorage storage;
+
+  @override
+  _FlutterDemoState createState() => _FlutterDemoState();
+}
+
+class _FlutterDemoState extends State<FlutterDemo> {
+  int _counter = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.storage.readCounter().then((int value) {
+      setState(() {
+        _counter = value;
+      });
     });
   }
 
-  Widget _buildDirectory(
-      BuildContext context, AsyncSnapshot<Directory?> snapshot) {
-    Text text = const Text('');
-    if (snapshot.connectionState == ConnectionState.done) {
-      if (snapshot.hasError) {
-        text = Text('Error: ${snapshot.error}');
-      } else if (snapshot.hasData) {
-        text = Text('path: ${snapshot.data!.path}');
-      } else {
-        text = const Text('path unavailable');
-      }
-    }
-    return Padding(padding: const EdgeInsets.all(16.0), child: text);
-  }
-
-  Widget _buildDirectories(
-      BuildContext context, AsyncSnapshot<List<Directory>?> snapshot) {
-    Text text = const Text('');
-    if (snapshot.connectionState == ConnectionState.done) {
-      if (snapshot.hasError) {
-        text = Text('Error: ${snapshot.error}');
-      } else if (snapshot.hasData) {
-        final String combined =
-            snapshot.data!.map((Directory d) => d.path).join(', ');
-        text = Text('paths: $combined');
-      } else {
-        text = const Text('path unavailable');
-      }
-    }
-    return Padding(padding: const EdgeInsets.all(16.0), child: text);
-  }
-
-  void _requestAppDocumentsDirectory() {
+  Future<File> _incrementCounter() {
     setState(() {
-      _appDocumentsDirectory = getApplicationDocumentsDirectory();
+      _counter++;
     });
-  }
 
-  void _requestAppSupportDirectory() {
-    setState(() {
-      var getAppDoc = getApplicationSupportDirectory();
-      var pathFile = "/data/user/0/com.example.example/files/data.json";
-      _appSupportDirectory = getAppDoc;
-        var db = jsondb(FileSync(pathFile));
-        db.defaults({"azka": "oke", "array": [], "json": {}}).write();
-    });
-  }
-
-  void _requestAppLibraryDirectory() {
-    setState(() {
-      _appLibraryDirectory = getLibraryDirectory();
-    });
-  }
-
-  void _requestExternalStorageDirectory() {
-    setState(() {
-      _externalDocumentsDirectory = getExternalStorageDirectory();
-    });
-  }
-
-  void _requestExternalStorageDirectories(StorageDirectory type) {
-    setState(() {
-      _externalStorageDirectories = getExternalStorageDirectories(type: type);
-    });
-  }
-
-  void _requestExternalCacheDirectories() {
-    setState(() {
-      _externalCacheDirectories = getExternalCacheDirectories();
-    });
+    // Write the variable as a string to the file.
+    return widget.storage.writeCounter(_counter);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const Text('Reading and Writing Files'),
       ),
       body: Center(
-        child: ListView(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                child: const Text('Get Temporary Directory'),
-                onPressed: _requestTempDirectory,
-              ),
-            ),
-            FutureBuilder<Directory?>(
-                future: _tempDirectory, builder: _buildDirectory),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                child: const Text('Get Application Documents Directory'),
-                onPressed: _requestAppDocumentsDirectory,
-              ),
-            ),
-            FutureBuilder<Directory?>(
-                future: _appDocumentsDirectory, builder: _buildDirectory),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                child: const Text('Get Application Support Directory'),
-                onPressed: _requestAppSupportDirectory,
-              ),
-            ),
-            FutureBuilder<Directory?>(
-                future: _appSupportDirectory, builder: _buildDirectory),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                child: const Text('Get Application Library Directory'),
-                onPressed: _requestAppLibraryDirectory,
-              ),
-            ),
-            FutureBuilder<Directory?>(
-                future: _appLibraryDirectory, builder: _buildDirectory),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                child: Text(Platform.isIOS
-                    ? 'External directories are unavailable on iOS'
-                    : 'Get External Storage Directory'),
-                onPressed:
-                    Platform.isIOS ? null : _requestExternalStorageDirectory,
-              ),
-            ),
-            FutureBuilder<Directory?>(
-                future: _externalDocumentsDirectory, builder: _buildDirectory),
-            Column(children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ElevatedButton(
-                  child: Text(Platform.isIOS
-                      ? 'External directories are unavailable on iOS'
-                      : 'Get External Storage Directories'),
-                  onPressed: Platform.isIOS
-                      ? null
-                      : () {
-                          _requestExternalStorageDirectories(
-                            StorageDirectory.music,
-                          );
-                        },
-                ),
-              ),
-            ]),
-            FutureBuilder<List<Directory>?>(
-                future: _externalStorageDirectories,
-                builder: _buildDirectories),
-            Column(children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ElevatedButton(
-                  child: Text(Platform.isIOS
-                      ? 'External directories are unavailable on iOS'
-                      : 'Get External Cache Directories'),
-                  onPressed:
-                      Platform.isIOS ? null : _requestExternalCacheDirectories,
-                ),
-              ),
-            ]),
-            FutureBuilder<List<Directory>?>(
-                future: _externalCacheDirectories, builder: _buildDirectories),
-          ],
+        child: Text(
+          'Button tapped $_counter time${_counter == 1 ? '' : 's'}.',
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
       ),
     );
   }
