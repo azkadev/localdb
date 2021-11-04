@@ -1,13 +1,11 @@
-// Copyright 2013 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-// ignore_for_file: public_member_api_docs
-
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:localdb/javascript/javascript.dart';
+import 'package:localdb/javascript/tanggal.dart';
+import 'package:localdb/jsondb.dart';
+import 'package:localdb/file/file.dart';
+import "package:localdb/javascript/other.dart";
 
 void main() {
   runApp(
@@ -84,7 +82,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _requestAppSupportDirectory() {
     setState(() {
-      _appSupportDirectory = getApplicationSupportDirectory();
+      var getAppDoc = getApplicationSupportDirectory();
+      var pathFile = "$getAppDoc/data.json";
+      _appSupportDirectory = getAppDoc;
+      var db = jsondb(FileSync(pathFile));
+      db.defaults({"azka": "oke", "array": [], "json": {}}).write();
     });
   }
 
