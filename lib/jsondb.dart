@@ -207,7 +207,7 @@ class _gets {
         if (typeof(stateDataValue) == "list") {
           stateDataFind = stateDataValue;
           stateSearchFind = dataFind;
-          var getData = findObjectinArray(stateDataValue, dataFind);
+          var getData = _findObjectinArray(stateDataValue, dataFind);
           stateDataValue = getData;
         } else {
           stateDataValue = null;
@@ -229,7 +229,7 @@ class _gets {
       if (ifjs(dataFind) && typeof(dataFind) == "object") {
         if (typeof(stateDataValue) == "list" && stateDataGet != null) {
           stateDataFile[stateDataGet.toString()] =
-              unsetObjectInArray(stateDataValue, dataFind);
+              _unsetObjectInArray(stateDataValue, dataFind);
         }
       } else {
         stateDataValue = null;
@@ -265,7 +265,7 @@ class _finds {
     if (typeof(stateDataValue) == "object" && typeof(dataAssign) == "object") {
       if (typeof(stateDataFind) == "list" && stateDataGet != null) {
         stateDataFile[stateDataGet.toString()] =
-            replaceObjectInArray(stateDataFind, stateSearchFind, dataAssign);
+            _replaceObjectInArray(stateDataFind, stateSearchFind, dataAssign);
       }
     }
     boolFromAssign = true;
@@ -302,7 +302,7 @@ class _lastwrite {
   }
 }
 
-replaceObjectInArray(array, object, newobject) {
+_replaceObjectInArray(array, object, newobject) {
   object.forEach((keyIndex, value) {
     var loopValue = object[keyIndex];
     var typeValue = typeof(loopValue);
@@ -331,7 +331,7 @@ replaceObjectInArray(array, object, newobject) {
   return array;
 }
 
-findObjectinArray(array, object) {
+_findObjectinArray(array, object) {
   var data;
   object.forEach((keyIndex, value) {
     var loopValue = object[keyIndex];
@@ -360,7 +360,7 @@ findObjectinArray(array, object) {
   return data;
 }
 
-unsetObjectInArray(array, object) {
+_unsetObjectInArray(array, object) {
   object.forEach((keyIndex, value) {
     var loopValue = object[keyIndex];
     var typeValue = typeof(loopValue);
@@ -385,37 +385,3 @@ unsetObjectInArray(array, object) {
   });
   return array;
 }
-
-/*
-findIndex(){
-    var typeValue = typeof(loopValue);
-    var index = (typeValue == "regexp")
-            ? () {
-                for (var i = 0; i < array.length; i++) {
-                  if (loopValue.hasMatch(array[i][keyIndex])) {
-                    return i;
-                  }
-                }
-              }.call()
-            : () {
-                for (var i = 0; i < array.length; i++) {
-                  if (array[i][keyIndex] == loopValue) {
-                    return i;
-                  }
-                }
-              }.call();
-  
-}
-*/
-
-/*
-
-function unsetArray(array_data, array_remove) {
-  if (isType(array_data) == "array" && isType(array_remove) == "array") {
-    return array_data.filter((i) => (array_remove.indexOf(i) === -1));
-  } else {
-    throw new Error("Please Use array data");
-  }
-}
-
-*/
