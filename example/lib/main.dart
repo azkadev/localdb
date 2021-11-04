@@ -9,18 +9,26 @@ import 'package:localdb/javascript/javascript.dart';
 
 void main() async {
   var pathApp = await PathStorage().appSupportPath;
+  var pathFile = "$pathApp/data.json";
   runApp(
     MaterialApp(
       title: 'Reading and Writing Files',
-      home: Center(child: Text("$pathApp/data.json"),),
+      home: FlutterDemo(
+        database: jsondb(FileSync(pathFile)),
+      ),
     ),
   );
 }
 
 class PathStorage {
   Future get appSupportPath async {
-    final directory = await getApplicationSupportDirectory();
-    return directory.path;
+    if (Platform.isAndroid) {
+      final directory = await getApplicationDocumentsDirectory();
+      return directory.path;
+    } else {
+      final directory = await getApplicationSupportDirectory();
+      return directory.path;
+    }
   }
 }
 
