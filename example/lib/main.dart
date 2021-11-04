@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -38,7 +40,7 @@ class _FlutterDemoState extends State<FlutterDemo> {
   @override
   void initState() {
     super.initState();
-    widget.database.defaults({"counter": 0 }).write();
+    widget.database.defaults({"counter": 0}).write();
     setState(() {
       try {
         _counter = widget.database.get("counter").value() ?? 0;
