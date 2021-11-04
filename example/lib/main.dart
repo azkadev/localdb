@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:example/database/database.dart';
+import 'package:example/pages/signins.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:localdb/jsondb.dart';
 import 'package:localdb/file/file.dart';
 import 'package:localdb/javascript/javascript.dart';
 import 'widget/header_widget.dart.txt';
+import 'pages/home.dart';
 
 void main() {
   runApp(
@@ -45,13 +47,38 @@ class _FlutterDemoState extends State<SplashSreen> {
         } else {
           var getAccountSigned =
               db.get("account").find({"status": "signed"}).value();
-          if (ifjs("ko")) {
-            // ignore: avoid_print
-            print(ifjs(true));
-            dataAccount = {};
+          if (ifjs(false)) {
+            dataAccount = {
+              "user_id": 1,
+              "first_name": "Gibran",
+              "last_name": "",
+              "photo": "",
+              "username": "azkadev",
+              "email": "gatau@gmail.com",
+              "password": "azkatampan"
+            };
             hashSign = true;
           } else {
-            dataAccounts = [];
+            dataAccounts = [
+              {
+                "user_id": 1,
+                "first_name": "Gibran",
+                "last_name": "",
+                "photo": "",
+                "username": "azkadev",
+                "email": "gatau@gmail.com",
+                "password": "azkatampan"
+              },
+              {
+                "user_id": 2,
+                "first_name": "Farel",
+                "last_name": "Arr",
+                "photo": "",
+                "username": "farel",
+                "email": "farel@gmail.com",
+                "password": "farel12345"
+              }
+            ];
             hashSign = false;
           }
           hashAccount = true;
@@ -64,22 +91,16 @@ class _FlutterDemoState extends State<SplashSreen> {
   Widget build(BuildContext context) {
     if (hashAccount) {
       if (hashSign) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('App'),
-          ),
-          body: const Center(
-            child: Text("Hey Selamat Datang Kembali di applikasi"),
-          ),
+        return MaterialApp(
+          debugShowCheckedModeBanner: true,
+          title: "Home",
+          home: Home(dataAccount: dataAccount),
         );
       } else {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('App'),
-          ),
-          body: const Center(
-            child: Text("Silahkan Tap Salah Satu Account anda"),
-          ),
+        return MaterialApp(
+          debugShowCheckedModeBanner: true,
+          title: "Home",
+          home: Signins(dataAccounts: dataAccounts),
         );
       }
     } else {

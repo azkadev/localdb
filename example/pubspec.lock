@@ -98,9 +98,9 @@ packages:
   localdb:
     dependency: "direct main"
     description:
-      name: localdb
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: ".."
+      relative: true
+    source: path
     version: "0.0.2"
   matcher:
     dependency: transitive
