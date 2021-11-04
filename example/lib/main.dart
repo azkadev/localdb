@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _requestAppSupportDirectory() {
     setState(() {
       var getAppDoc = getApplicationSupportDirectory();
-      var pathFile = "/data/user/0/com.example.example/data.json";
+      var pathFile = "/data/user/0/com.example.example/files/data.json";
       _appSupportDirectory = getAppDoc;
         var db = jsondb(FileSync(pathFile));
         db.defaults({"azka": "oke", "array": [], "json": {}}).write();
