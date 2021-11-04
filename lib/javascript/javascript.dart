@@ -157,5 +157,6 @@ typeof(data) {
       .toString()
       .toLowerCase()
       .replaceAll(RegExp(r"<.*"), "")
-      .replaceAll(RegExp(r"_internallinkedhashmap"), "object");
+      .replaceAll(RegExp(r"_internallinkedhashmap"), "object")
+      .replaceAll(RegExp(r"_"), "");
 }

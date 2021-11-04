@@ -6,17 +6,11 @@ import 'package:localdb/file/file.dart';
 import "package:localdb/javascript/other.dart";
 import 'package:localdb/localdb.dart';
 
-class _baru {
-  _baru();
-
-  oke() {
-    print("assa");
-  }
-}
-
 void main() async {
-  var pathFile = "${Directory.current.path}/bin/json.json";
+  var pathFile = "${Directory.current.path}/data.json";
   var db = jsondb(FileSync(pathFile));
+
   db.defaults({"azka": "oke", "array": [], "json": {}}).write();
-  db.get("array").find("ok");
+  print(db.get("array").find({"key": "azka"}).value());
+  db.set("key.new", "value").write();
 }

@@ -1,4 +1,5 @@
 import 'javascript/javascript.dart';
+
 // ignore: prefer_typing_uninitialized_variables
 var stateDataFile;
 // ignore: prefer_typing_uninitialized_variables
@@ -93,7 +94,7 @@ class jsondb {
     return _gets(_db);
   }
 
-  //--! Complete 40%
+  //--! Complete 50% because manual
   _lastwrite set(keyData, valueData) {
     if (!ifjs(stateDataFile)) {
       stateDataFile = _data ?? {};
@@ -102,10 +103,52 @@ class jsondb {
       var keyDatas = keyData.toString().split(".");
       if (keyDatas.length == 1) {
         stateDataFile[keyData.toString()] = valueData;
-      } else if (keyDatas.length > 1) {
-        var json = {"sa": "As"};
-        print(json.containsKey("sa"));
-        print(json);
+      } else if (keyDatas.length == 2) {
+        stateDataFile[keyDatas[0].toString()] = {};
+        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()] =
+            valueData;
+      } else if (keyDatas.length == 3) {
+        stateDataFile[keyDatas[0].toString()] = {};
+        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()] = {};
+        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+            [keyDatas[2].toString()] = valueData;
+      } else if (keyDatas.length == 4) {
+        stateDataFile[keyDatas[0].toString()] = {};
+        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()] = {};
+        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+            [keyDatas[2].toString()] = {};
+        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+            [keyDatas[2].toString()][keyDatas[3].toString()] = valueData;
+      } else if (keyDatas.length == 5) {
+        stateDataFile[keyDatas[0].toString()] = {};
+        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()] = {};
+        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+            [keyDatas[2].toString()] = {};
+        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+            [keyDatas[2].toString()][keyDatas[3].toString()] = {};
+        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+                [keyDatas[2].toString()][keyDatas[3].toString()]
+            [keyDatas[4].toString()] = valueData;
+      } else if (keyDatas.length == 6) {
+        stateDataFile[keyDatas[0].toString()] = {};
+        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()] = {};
+        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+            [keyDatas[2].toString()] = {};
+        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+            [keyDatas[2].toString()][keyDatas[3].toString()] = valueData;
+      } else if (keyDatas.length == 5) {
+        stateDataFile[keyDatas[0].toString()] = {};
+        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()] = {};
+        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+            [keyDatas[2].toString()] = {};
+        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+            [keyDatas[2].toString()][keyDatas[3].toString()] = {};
+        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+                [keyDatas[2].toString()][keyDatas[3].toString()]
+            [keyDatas[4].toString()] = {};
+        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+                [keyDatas[2].toString()][keyDatas[3].toString()]
+            [keyDatas[4].toString()][keyDatas[4].toString()] = valueData;
       }
     }
     return _lastwrite(_db);
@@ -156,7 +199,11 @@ class _gets {
     if (ifjs(stateDataValue)) {
       if (ifjs(dataFind) && typeof(dataFind) == "object") {
         boolFromFind = true;
-        stateDataValue = "oke";
+        if (typeof(stateDataValue) == "list") {
+          stateDataValue = findObjectinArray(stateDataValue, dataFind);
+        } else {
+          stateDataValue = null;
+        }
       } else {
         stateDataValue = null;
       }
@@ -164,6 +211,23 @@ class _gets {
       stateDataFile = null;
     }
     return _finds(_db);
+  }
+
+  _lastwrite remove(dataFind) {
+    if (!ifjs(stateDataFile)) {
+      stateDataFile = _data ?? {};
+    }
+    if (ifjs(stateDataValue)) {
+      if (ifjs(dataFind) && typeof(dataFind) == "object") {
+        boolFromFind = true;
+        stateDataValue = "oke";
+      } else {
+        stateDataValue = null;
+      }
+    } else {
+      stateDataFile = null;
+    }
+    return _lastwrite(_db);
   }
 
   value() {
@@ -188,14 +252,16 @@ class _finds {
     if (!ifjs(stateDataFile)) {
       stateDataFile = _data ?? {};
     }
-    if (typeof(stateDataValue) == "object" && typeof(dataAssign) == "object") {}
+    if (typeof(stateDataValue) == "object" && typeof(dataAssign) == "object") {
+      replaceObjectInArray(array, object, newobject);
+    }
     boolFromAssign = true;
     return _lastwrite(_db);
   }
 
   value() {
     if (boolFromFind) {
-      return "oke bos";
+      return stateDataValue;
     } else {
       return null;
     }
@@ -222,3 +288,131 @@ class _lastwrite {
     return _db.create(JSON.stringify(stateDataFile, null, 2));
   }
 }
+
+replaceObjectInArray(array, object, newobject) {
+  object.forEach((keyIndex, value) {
+    var loopValue = object[keyIndex];
+    var typeValue = typeof(loopValue);
+    var index = (typeValue == "regexp")
+        ? () {
+            for (var i = 0; i < array.length; i++) {
+              if (loopValue.hasMatch(array[i][keyIndex])) {
+                return i;
+              }
+            }
+          }.call()
+        : () {
+            for (var i = 0; i < array.length; i++) {
+              if (array[i][keyIndex] == loopValue) {
+                return i;
+              }
+            }
+          }.call();
+    if (index != null) {
+      newobject.forEach((newkeyIndex, newvalue) {
+        var loopValue = newobject[newkeyIndex.toString()];
+        array[index][newkeyIndex.toString()] = loopValue;
+      });
+    }
+  });
+  return array;
+}
+
+findObjectinArray(array, object) {
+  var data;
+  object.forEach((keyIndex, value) {
+    var loopValue = object[keyIndex];
+    var typeValue = typeof(loopValue);
+    var index = (typeValue == "regexp")
+        ? () {
+            for (var i = 0; i < array.length; i++) {
+              if (loopValue.hasMatch(array[i][keyIndex])) {
+                return i;
+              }
+            }
+          }.call()
+        : () {
+            for (var i = 0; i < array.length; i++) {
+              if (array[i][keyIndex] == loopValue) {
+                return i;
+              }
+            }
+          }.call();
+    if (index != null) {
+      data = array[index];
+    } else {
+      data = null;
+    }
+  });
+  return data;
+}
+/*
+findIndex(){
+    var typeValue = typeof(loopValue);
+    var index = (typeValue == "regexp")
+            ? () {
+                for (var i = 0; i < array.length; i++) {
+                  if (loopValue.hasMatch(array[i][keyIndex])) {
+                    return i;
+                  }
+                }
+              }.call()
+            : () {
+                for (var i = 0; i < array.length; i++) {
+                  if (array[i][keyIndex] == loopValue) {
+                    return i;
+                  }
+                }
+              }.call();
+  
+}
+*/
+
+/*
+
+function unsetArray(array_data, array_remove) {
+  if (isType(array_data) == "array" && isType(array_remove) == "array") {
+    return array_data.filter((i) => (array_remove.indexOf(i) === -1));
+  } else {
+    throw new Error("Please Use array data");
+  }
+}
+
+
+function unsetObjectInArray(array, object) {
+  if (isType(array) == "array" && isType(object) == "object") {
+    for (var keyIndex in object) {
+      if (Object.prototype.hasOwnProperty.call(object, keyIndex)) {
+        var loopValue = object[keyIndex];
+        var typeValue = isType(loopValue);
+        var index = (typeValue == "string") ? array.findIndex(key => key[keyIndex] === loopValue) : (typeValue == "regexp") ? array.findIndex(key => loopValue.exec(key[keyIndex])) : array.findIndex(key => key[keyIndex] === loopValue);
+        if (index >= 0) {
+          array.splice(index, 1);
+        }
+      }
+    }
+    return array;
+  } else {
+    throw new Error("Please Use array data");
+  }
+}
+
+function replaceObjectInArray(array, object, newobject) {
+  for (var keyIndex in object) {
+    if (Object.prototype.hasOwnProperty.call(object, keyIndex)) {
+      var loopValue = object[keyIndex];
+      var typeValue = isType(loopValue);
+      var index = (typeValue == "string") ? array.findIndex(key => key[keyIndex] === loopValue) : (typeValue == "regexp") ? array.findIndex(key => loopValue.exec(key[keyIndex])) : array.findIndex(key => key[keyIndex] === loopValue);
+      if (index >= 0) {
+        for (var newkeyIndex in newobject) {
+          if (Object.prototype.hasOwnProperty.call(newobject, newkeyIndex)) {
+            var loopValue = newobject[newkeyIndex];
+            array[index][newkeyIndex] = loopValue;
+          }
+        }
+      }
+    }
+  }
+  return array;
+}
+*/
