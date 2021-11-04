@@ -11,8 +11,5 @@ void main() async {
   var db = jsondb(FileSync(pathFile));
 
   db.defaults({"azka": "oke", "array": [], "json": {}}).write();
-  print(db.get("array").find({"key": "lupa"}).assign({
-    "azka": "gantengt",
-    "oksa": ["skaoaskoksoa"]
-  }).write());
+  db.get("array").remove({"key": "azka"}).write();
 }

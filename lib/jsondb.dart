@@ -227,8 +227,10 @@ class _gets {
     }
     if (ifjs(stateDataValue)) {
       if (ifjs(dataFind) && typeof(dataFind) == "object") {
-        boolFromFind = true;
-        stateDataValue = "oke";
+        if (typeof(stateDataValue) == "list" && stateDataGet != null) {
+          stateDataFile[stateDataGet.toString()] =
+              unsetObjectInArray(stateDataValue, dataFind);
+        }
       } else {
         stateDataValue = null;
       }
@@ -262,7 +264,8 @@ class _finds {
     }
     if (typeof(stateDataValue) == "object" && typeof(dataAssign) == "object") {
       if (typeof(stateDataFind) == "list" && stateDataGet != null) {
-        stateDataFile[stateDataGet.toString()] = replaceObjectInArray(stateDataFind, stateSearchFind, dataAssign);
+        stateDataFile[stateDataGet.toString()] =
+            replaceObjectInArray(stateDataFind, stateSearchFind, dataAssign);
       }
     }
     boolFromAssign = true;
@@ -356,6 +359,33 @@ findObjectinArray(array, object) {
   });
   return data;
 }
+
+unsetObjectInArray(array, object) {
+  object.forEach((keyIndex, value) {
+    var loopValue = object[keyIndex];
+    var typeValue = typeof(loopValue);
+    var index = (typeValue == "regexp")
+        ? () {
+            for (var i = 0; i < array.length; i++) {
+              if (loopValue.hasMatch(array[i][keyIndex])) {
+                return i;
+              }
+            }
+          }.call()
+        : () {
+            for (var i = 0; i < array.length; i++) {
+              if (array[i][keyIndex] == loopValue) {
+                return i;
+              }
+            }
+          }.call();
+    if (index != null) {
+      array.removeAt(index);
+    }
+  });
+  return array;
+}
+
 /*
 findIndex(){
     var typeValue = typeof(loopValue);
@@ -388,41 +418,4 @@ function unsetArray(array_data, array_remove) {
   }
 }
 
-
-function unsetObjectInArray(array, object) {
-  if (isType(array) == "array" && isType(object) == "object") {
-    for (var keyIndex in object) {
-      if (Object.prototype.hasOwnProperty.call(object, keyIndex)) {
-        var loopValue = object[keyIndex];
-        var typeValue = isType(loopValue);
-        var index = (typeValue == "string") ? array.findIndex(key => key[keyIndex] === loopValue) : (typeValue == "regexp") ? array.findIndex(key => loopValue.exec(key[keyIndex])) : array.findIndex(key => key[keyIndex] === loopValue);
-        if (index >= 0) {
-          array.splice(index, 1);
-        }
-      }
-    }
-    return array;
-  } else {
-    throw new Error("Please Use array data");
-  }
-}
-
-function replaceObjectInArray(array, object, newobject) {
-  for (var keyIndex in object) {
-    if (Object.prototype.hasOwnProperty.call(object, keyIndex)) {
-      var loopValue = object[keyIndex];
-      var typeValue = isType(loopValue);
-      var index = (typeValue == "string") ? array.findIndex(key => key[keyIndex] === loopValue) : (typeValue == "regexp") ? array.findIndex(key => loopValue.exec(key[keyIndex])) : array.findIndex(key => key[keyIndex] === loopValue);
-      if (index >= 0) {
-        for (var newkeyIndex in newobject) {
-          if (Object.prototype.hasOwnProperty.call(newobject, newkeyIndex)) {
-            var loopValue = newobject[newkeyIndex];
-            array[index][newkeyIndex] = loopValue;
-          }
-        }
-      }
-    }
-  }
-  return array;
-}
 */
