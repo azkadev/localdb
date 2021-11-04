@@ -187,5 +187,8 @@ class FileSync {
     File(pathFile).deleteSync();
     return true;
   }
+  length() {
+    return File(pathFile).openSync();
+  }
 
 }
