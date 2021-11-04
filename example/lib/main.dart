@@ -11,7 +11,7 @@ void main() async {
     MaterialApp(
       title: 'Reading and Writing Files',
       home: FlutterDemo(
-        database: jsondb(FileSync("$pathApp/newjson.json")),
+        database: jsondb(FileSync("$pathApp/db.json")),
       ),
     ),
   );
@@ -38,7 +38,7 @@ class _FlutterDemoState extends State<FlutterDemo> {
   @override
   void initState() {
     super.initState();
-    widget.database.defaults({"counter": 0}).write();
+    widget.database.defaults({"counter": 0 }).write();
     setState(() {
       try {
         _counter = widget.database.get("counter").value() ?? 0;
