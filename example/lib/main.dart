@@ -8,7 +8,8 @@ import 'package:localdb/file/file.dart';
 import 'package:localdb/javascript/javascript.dart';
 
 void main() async {
-  var pathFile = "/data/user/0/com.example.example/files/data.json";
+  final path = await PathStorage().appSupportPath;
+  var pathFile = "$path/data.json";
   runApp(
     MaterialApp(
       title: 'Reading and Writing Files',
@@ -20,7 +21,7 @@ void main() async {
 }
 
 class PathStorage {
-  Future get appSupportPath async {
+  Future<String> get appSupportPath async {
     if (Platform.isAndroid) {
       final directory = await getApplicationDocumentsDirectory();
       return directory.path;
