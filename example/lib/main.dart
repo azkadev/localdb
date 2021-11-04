@@ -1,82 +1,76 @@
 import 'dart:io';
 
+import 'package:example/database/database.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:localdb/jsondb.dart';
 import 'package:localdb/file/file.dart';
 import 'package:localdb/javascript/javascript.dart';
-
-void main() async {
-  final path = await PathStorage().appSupportPath;
-  var pathFile = "$path/data.json";
+import 'widget/header_widget.dart.txt';
+void main() {
   runApp(
-    MaterialApp(
-      title: 'Reading and Writing Files',
-      home: FlutterDemo(
-        database: jsondb(FileSync(pathFile)),
-      ),
+    const MaterialApp(
+      debugShowCheckedModeBanner: true,
+      title: "Azka Dev",
+      home: SplashSreen(),
     ),
   );
 }
 
-class PathStorage {
-  Future<String> get appSupportPath async {
-    if (Platform.isAndroid) {
-      final directory = await getApplicationDocumentsDirectory();
-      return directory.path;
-    } else {
-      final directory = await getApplicationSupportDirectory();
-      return directory.path;
-    }
-  }
-}
-
-class FlutterDemo extends StatefulWidget {
-  const FlutterDemo({Key? key, required this.database}) : super(key: key);
-
-  final jsondb database;
-
+class SplashSreen extends StatefulWidget {
+  const SplashSreen({Key? key}) : super(key: key);
   @override
   _FlutterDemoState createState() => _FlutterDemoState();
 }
 
-class _FlutterDemoState extends State<FlutterDemo> {
-  int _counter = 0;
+class _FlutterDemoState extends State<SplashSreen> {
+  bool hashAccount = false;
   @override
   void initState() {
     super.initState();
-    widget.database.defaults({"counter": 0}).write();
-    setState(() {
-      try {
-        _counter = widget.database.get("counter").value() ?? 0;
-      } catch (e) {
-        _counter = 0;
-      }
+    Database("/data.json").JsonDb.then((db) {
+      var dataDefault = {"account": []};
+      db.defaults(dataDefault).write();
+      var getAccount = db.get("account").value();
+      print(getAccount.length);
+      setState(() {
+        if (getAccount.length == 0) {
+          hashAccount = false;
+        } else {
+          hashAccount = true;
+        }
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Reading and Writing Files'),
-      ),
-      body: Center(
-        child: Text(
-          'Button tapped $_counter time${_counter == 1 ? '' : 's'}.',
+    if (hashAccount) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Anda Linux'),
+        ),
+        body: Center(
+          child:
+              Text((hashAccount) ? "Ada Account" : "Tidak Ada Account satupun"),
+        ),
+      );
+    } else {
+      return Scaffold(
+        backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Stack(
+          children: const [
+            SizedBox(
+              height: 150,
+              child: HeaderWidget(150, false, Icons.person_add_alt_1_rounded),
+            ),
+          ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _counter++;
-          });
-          widget.database.set("counter", _counter).write();
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
+      );
+    }
   }
 }
