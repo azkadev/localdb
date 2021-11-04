@@ -1,3 +1,5 @@
+import 'package:localdb/jsondb.dart';
+
 import 'javascript/javascript.dart';
 
 // ignore: prefer_typing_uninitialized_variables
@@ -13,25 +15,25 @@ var stateDataValue;
 
 var boolFromGet = false;
 var boolFromPush = false;
-
+var boolFromFind = false;
 var boolFromAssign = false;
 
 // ignore: camel_case_types
 class jsondb {
-  // ignore: prefer_typing_uninitialized_variables
-  var defaultsdata;
-  // ignore: prefer_typing_uninitialized_variables
-  var db;
-  // ignore: prefer_typing_uninitialized_variables
-  var data;
-  // ignore: prefer_typing_uninitialized_variables
-  var states;
-  jsondb(this.db) {
-    data = JSON.parse(db.data());
+  // ignore: prefer_typing_uninitialized_variables, prefer_final_fields
+  var _db;
+  // ignore: prefer_typing_uninitialized_variables, unused_field
+  var _data;
+  jsondb(this._db) {
+    if (ifjs(_db.data())) {
+      _data = JSON.parse(_db.data());
+    } else {
+      _data = {};
+    }
   }
 
   //--! Complete 100%
-  jsondb defaults(value) {
+  _lastwrite defaults(value) {
     if (ifjs(value)) {
       Map json = {};
       if (typeof(value) == "string") {
@@ -47,30 +49,30 @@ class jsondb {
       } else if (typeof(value) == "object") {
         json = value;
       }
-      if (ifjs(data)) {
+      if (ifjs(_data)) {
         json.forEach((key, value) {
-          if (!data.containsKey(key)) {
-            data[key] = value;
+          if (!_data.containsKey(key)) {
+            _data[key] = value;
           }
         });
-        stateDataFile = data;
+        stateDataFile = _data;
       } else {
         stateDataFile = json;
       }
     } else {
-      if (ifjs(data)) {
-        stateDataFile = data;
+      if (ifjs(_data)) {
+        stateDataFile = _data;
       } else {
         stateDataFile = {};
       }
     }
-    return jsondb(db);
+    return _lastwrite(_db);
   }
 
   //--! Complete 100%
-  jsondb get(datas) {
+  _gets get(datas) {
     if (!ifjs(stateDataFile)) {
-      stateDataFile = data ?? {};
+      stateDataFile = _data ?? {};
     }
     if (ifjs(datas) && typeof(datas) == "string") {
       var getData = stateDataFile[datas.toString()];
@@ -91,56 +93,13 @@ class jsondb {
     }
     stateFromGet = true;
     boolFromGet = true;
-    return jsondb(db);
-  }
-
-  //--! Complete 10%
-  jsondb assign(dataAssign) {
-    if (!ifjs(stateDataFile)) {
-      stateDataFile = data ?? {};
-    }
-    if (typeof(stateDataValue) == "object" && typeof(dataAssign) == "object") {}
-    boolFromAssign = true;
-    return jsondb(db);
-  }
-
-  //--! Complete 100%
-  jsondb push(datas) {
-    if (!ifjs(stateDataFile)) {
-      stateDataFile = data ?? {};
-    }
-    if (ifjs(datas) && ifjs(stateDataGet)) {
-      var getData = stateDataValue;
-      if (typeof(getData) == "list") {
-        getData.add(datas);
-        stateDataFile[stateDataGet.toString()] == getData;
-      }
-    }
-    boolFromPush = true;
-    return jsondb(db);
-  }
-
-  //--! Complete 10%
-  jsondb find(dataFind) {
-    if (!ifjs(stateDataFile)) {
-      stateDataFile = data ?? {};
-    }
-    if (ifjs(stateDataValue) || ifjs(stateDataGet)) {
-      if (ifjs(dataFind) && typeof(dataFind) == "object") {
-        stateDataValue = "oke";
-      } else {
-        stateDataValue = null;
-      }
-    } else {
-      stateDataFile = null;
-    }
-    return jsondb(db);
+    return _gets(_db);
   }
 
   //--! Complete 40%
-  jsondb set(keyData, valueData) {
+  _lastwrite set(keyData, valueData) {
     if (!ifjs(stateDataFile)) {
-      stateDataFile = data ?? {};
+      stateDataFile = _data ?? {};
     }
     if (ifjs(keyData) && ifjs(valueData) && typeof(keyData) == "string") {
       var keyDatas = keyData.toString().split(".");
@@ -152,59 +111,117 @@ class jsondb {
         print(json);
       }
     }
-    return jsondb(db);
+    return _lastwrite(_db);
   }
 
   value() {
-    if (!ifjs(stateDataFile)) {
-      stateDataFile = data ?? {};
-    }
-    if (ifjs(stateDataValue) || ifjs(stateDataGet)) {
-      if ((boolFromPush || boolFromAssign) && !boolFromGet) {
-        return stateDataFile;
-      } else {
-        return stateDataValue;
-      }
+    if (ifjs(_data)) {
+      return _data;
     } else {
-      if (ifjs(data) && typeof(stateFromGet) == "null") {
-        return data;
-      } else {
-        return null;
-      }
+      return null;
+    }
+  }
+}
+
+class _gets {
+  // ignore: prefer_typing_uninitialized_variables, prefer_final_fields
+  var _db;
+  // ignore: prefer_typing_uninitialized_variables, unused_field
+  var _data;
+  _gets(this._db) {
+    if (ifjs(_db.data())) {
+      _data = JSON.parse(_db.data());
+    } else {
+      _data = {};
     }
   }
 
+  //--! Complete 100%
+  _lastwrite push(datas) {
+    if (!ifjs(stateDataFile)) {
+      stateDataFile = _data ?? {};
+    }
+    if (ifjs(datas) && ifjs(stateDataGet)) {
+      var getData = stateDataValue;
+      if (typeof(getData) == "list") {
+        getData.add(datas);
+        stateDataFile[stateDataGet.toString()] == getData;
+      }
+    }
+    boolFromPush = true;
+    return _lastwrite(_db);
+  }
+
+  _finds find(dataFind) {
+    if (!ifjs(stateDataFile)) {
+      stateDataFile = _data ?? {};
+    }
+    if (ifjs(stateDataValue)) {
+      if (ifjs(dataFind) && typeof(dataFind) == "object") {
+        boolFromFind = true;
+        stateDataValue = "oke";
+      } else {
+        stateDataValue = null;
+      }
+    } else {
+      stateDataFile = null;
+    }
+    return _finds(_db);
+  }
+
+  value() {
+    return stateDataValue;
+  }
+}
+
+class _finds {
+  // ignore: prefer_typing_uninitialized_variables, prefer_final_fields
+  var _db;
+  // ignore: prefer_typing_uninitialized_variables, unused_field
+  var _data;
+  _finds(this._db) {
+    if (ifjs(_db.data())) {
+      _data = JSON.parse(_db.data());
+    } else {
+      _data = {};
+    }
+  }
+  //--! Complete 10%
+  _lastwrite assign(dataAssign) {
+    if (!ifjs(stateDataFile)) {
+      stateDataFile = _data ?? {};
+    }
+    if (typeof(stateDataValue) == "object" && typeof(dataAssign) == "object") {}
+    boolFromAssign = true;
+    return _lastwrite(_db);
+  }
+
+  value() {
+    if (boolFromFind) {
+      return "oke bos";
+    } else {
+      return null;
+    }
+  }
+}
+
+// ignore: camel_case_types
+class _lastwrite {
+  // ignore: prefer_typing_uninitialized_variables, prefer_final_fields
+  var _db;
+  // ignore: prefer_typing_uninitialized_variables
+  var _data;
+  _lastwrite(this._db) {
+    if (ifjs(_db.data())) {
+      _data = JSON.parse(_db.data());
+    } else {
+      _data = {};
+    }
+  }
   write() {
     if (!ifjs(stateDataFile)) {
-      stateDataFile = data ?? {};
+      stateDataFile = _data ?? {};
     }
-    return db.create(JSON.stringify(stateDataFile, null, 2));
-  }
-
-  valueprintPretty() {
-    if (!ifjs(stateDataFile)) {
-      stateDataFile = data ?? {};
-    }
-    if (!boolFromPush && !boolFromAssign && !boolFromGet) {
-      if (ifjs(data) && typeof(stateFromGet) == "null") {
-        try {
-          print(JSON.stringify(data, null, 2));
-        } catch (e) {
-          print(data);
-        }
-      } else {
-        try {
-          print(JSON.stringify(JSON.parse(db.data()), null, 2));
-        } catch (e) {
-          print(JSON.parse(db.data()));
-        }
-      }
-    } else {
-      if (boolFromGet) {
-        if (boolFromPush) {
-          print("sa");
-        }
-      }
-    }
+    return _db.create(JSON.stringify(stateDataFile, null, 2));
   }
 }
