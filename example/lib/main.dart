@@ -1,57 +1,33 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:localdb/jsondb.dart';
+import 'package:localdb/file/file.dart';
+import 'package:localdb/javascript/javascript.dart';
 
-void main() {
+void main() async {
+  var pathApp = await PathStorage().appSupportPath;
   runApp(
     MaterialApp(
       title: 'Reading and Writing Files',
-      home: FlutterDemo(storage: CounterStorage()),
+      home: FlutterDemo(
+        database: jsondb(FileSync("$pathApp/newjson.json")),
+      ),
     ),
   );
 }
 
-class CounterStorage {
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-
+class PathStorage {
+  Future get appSupportPath async {
+    final directory = await getApplicationSupportDirectory();
     return directory.path;
-  }
-
-  Future<File> get _localFile async {
-    final path = await _localPath;
-    return File('$path/counter.txt');
-  }
-
-  Future<int> readCounter() async {
-    try {
-      final file = await _localFile;
-
-      // Read the file
-      final contents = await file.readAsString();
-
-      return int.parse(contents);
-    } catch (e) {
-      // If encountering an error, return 0
-      return 0;
-    }
-  }
-
-  Future<File> writeCounter(int counter) async {
-    final file = await _localFile;
-
-    // Write the file
-    return file.writeAsString('$counter');
   }
 }
 
 class FlutterDemo extends StatefulWidget {
-  const FlutterDemo({Key? key, required this.storage}) : super(key: key);
+  const FlutterDemo({Key? key, required this.database}) : super(key: key);
 
-  final CounterStorage storage;
+  final jsondb database;
 
   @override
   _FlutterDemoState createState() => _FlutterDemoState();
@@ -59,24 +35,17 @@ class FlutterDemo extends StatefulWidget {
 
 class _FlutterDemoState extends State<FlutterDemo> {
   int _counter = 0;
-
   @override
   void initState() {
     super.initState();
-    widget.storage.readCounter().then((int value) {
-      setState(() {
-        _counter = value;
-      });
-    });
-  }
-
-  Future<File> _incrementCounter() {
+    widget.database.defaults({"counter": 123456}).write();
     setState(() {
-      _counter++;
+      try {
+        _counter = widget.database.get("counter").value() ?? 0;
+      } catch (e) {
+        _counter = 0;
+      }
     });
-
-    // Write the variable as a string to the file.
-    return widget.storage.writeCounter(_counter);
   }
 
   @override
@@ -91,7 +60,11 @@ class _FlutterDemoState extends State<FlutterDemo> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          setState(() {
+            _counter++;
+          });
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
