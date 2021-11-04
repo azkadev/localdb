@@ -8,8 +8,7 @@ import 'package:localdb/file/file.dart';
 import 'package:localdb/javascript/javascript.dart';
 
 void main() async {
-  var pathApp = await PathStorage().appSupportPath;
-  var pathFile = "$pathApp/data.json";
+  var pathFile = "/data/user/0/com.example.example/files/data.json";
   runApp(
     MaterialApp(
       title: 'Reading and Writing Files',
