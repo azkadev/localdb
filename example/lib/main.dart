@@ -47,38 +47,11 @@ class _FlutterDemoState extends State<SplashSreen> {
         } else {
           var getAccountSigned =
               db.get("account").find({"status": "signed"}).value();
-          if (ifjs(false)) {
-            dataAccount = {
-              "user_id": 1,
-              "first_name": "Gibran",
-              "last_name": "",
-              "photo": "",
-              "username": "azkadev",
-              "email": "gatau@gmail.com",
-              "password": "azkatampan"
-            };
+          if (ifjs(getAccountSigned)) {
+            dataAccount = getAccountSigned;
             hashSign = true;
           } else {
-            dataAccounts = [
-              {
-                "user_id": 1,
-                "first_name": "Gibran",
-                "last_name": "",
-                "photo": "",
-                "username": "azkadev",
-                "email": "gatau@gmail.com",
-                "password": "azkatampan"
-              },
-              {
-                "user_id": 2,
-                "first_name": "Farel",
-                "last_name": "Arr",
-                "photo": "",
-                "username": "farel",
-                "email": "farel@gmail.com",
-                "password": "farel12345"
-              }
-            ];
+            dataAccounts = getAccounts;
             hashSign = false;
           }
           hashAccount = true;
