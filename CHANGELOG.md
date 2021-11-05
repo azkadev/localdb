@@ -9,4 +9,8 @@
 
 ## 0.0.2
 
-- Change New Structur Library
+- Change New Structur Library.
+
+## 0.0.3
+
+- Add More Methods.

@@ -3,7 +3,7 @@ description: JsonDb is a library to make it easier to create local databases and
   
   I created this library because it was inspired by the library lowdb.
 
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/azkadev/localdb
 repository: https://github.com/azkadev/localdb
 issue_tracker: https://github.com/azkadev/localdb/issues

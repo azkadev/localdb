@@ -67,96 +67,38 @@ flutter pub add localdb
   <details>
 
   ```dart
-  import 'dart:io';
-  import 'package:localdb/jsondb.dart';
-  import 'package:localdb/file/file.dart';
-  import 'package:localdb/javascript/javascript.dart';
+    import 'dart:io';
+    import 'package:localdb/jsondb.dart';
+    import 'package:localdb/file/file.dart';
 
-  void main() {
-    var db = jsondb(FileSync("${Directory.current.path}/azkadev.json"));
-  
-    db.defaults({
-      "name": "jsondb",
-      "version": "0.0.0",
-      "links": {
-        "repository": "https://github.com/azkadev/jsondb.git",
-        "library": "",
-        "quickstart_app": ""
-      },
-      "contributors": [
-          {"username": "azkadev", "country": "id"}
-      ],
-      "post": [
-        {
-          "id": 1,
-          "title": "Library v1",
-          "data": "Lorepsum ipsum dipsum gatau lagi lanjutanya",
-          "comment": [
-            {
-              "id": 1,
-              "username": "azkadev",
-              "country": "id",
-              "data": "wow library local database json"
-            },
-            {
-              "id": 2,
-              "username": "github",
-              "country": "id",
-              "data": "wow library please update more",
-              "reply": [
-                {
-                  "id": 1,
-                  "username": "azkadev",
-                  "country": "id",
-                  "reply_to_message": "owner",
-                  "data": "ok brow i will update next"
-                },
-                {
-                  "id": 1,
-                  "username": "github",
-                  "country": "id",
-                  "data": "wow thanks",
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }).write();
+    void main() async {
+      var pathFile = "${Directory.current.path}/data.json";
+      var db = jsondb(FileSync(pathFile));
+      db.defaults({
+        "azka": "oke",
+        "array": [
+          {"key": "azka"},
+          {"key": "kunci"},
+          {"key": "bagus"}
+        ],
+        "json": {}
+      }).write();
 
-    //--! add data
-    var jsonData = {
-      "id": 2,
-      "title": "Library v2",
-      "data": "Lorepsum ipsum dipsum gatau lagi lanjutanya"
-    };
-    // get data from key post and from object key title
-    var getData = db.get("post").find({"title": "Update v2"}).value();
-    // check data
-    if (ifjs(getData)) {
-      // update data
-      jsonData["title"] = "new Update";
-      db.get("post").find({"title": "Update v2"}).assign(jsonData).value();
-    } else {
-      // add new data
-      db.get("post").push(jsonData).write();
+      db.get("array").find({"key": "kunci"}).assign(
+      {"key": "kuncibaru", "post": "5", "data": "oke"}).write();
+
+      db.get("array").remove({"key": "bagus"}).write();
+
+      db.set("info.links.youtube", "youtube.com").write();
+
+      db.get("array").push({"key": "asaooaoao"}).write();
+
+      print(db.get("array").find({"post": "5"}).value());
+
+      print(db.get("array").value());
+
+      print(db.value());
     }
-  
-    //--! Find Data
-    db.get("contributors").push({
-      "username": "github", "country": "en"
-    }).write();
-
-    //--! Find Data
-    var findData = db.get("contributors").find({"username": "azkadev" }).value();
-    print(findData)
-
-    // set data
-    db.set("key.data", { "github": "azkak" }).write();
-
-    //--! Print all dat
-    print(db.value());
-  }
   ```
 
   </details>

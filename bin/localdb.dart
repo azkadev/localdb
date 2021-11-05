@@ -1,15 +1,32 @@
 import 'dart:io';
-import 'package:localdb/javascript/javascript.dart';
-import 'package:localdb/javascript/tanggal.dart';
 import 'package:localdb/jsondb.dart';
 import 'package:localdb/file/file.dart';
-import "package:localdb/javascript/other.dart";
-import 'package:localdb/localdb.dart';
 
 void main() async {
   var pathFile = "${Directory.current.path}/data.json";
   var db = jsondb(FileSync(pathFile));
+  db.defaults({
+    "azka": "oke",
+    "array": [
+      {"key": "azka"},
+      {"key": "kunci"},
+      {"key": "bagus"}
+    ],
+    "json": {}
+  }).write();
 
-  db.defaults({"azka": "oke", "array": [], "json": {}}).write();
-  db.get("array").remove({"key": "azka"}).write();
+  db.get("array").find({"key": "kunci"}).assign(
+      {"key": "kuncibaru", "post": "5", "data": "oke"}).write();
+
+  db.get("array").remove({"key": "bagus"}).write();
+
+  db.set("info.links.youtube", "youtube.com").write();
+
+  db.get("array").push({"key": "asaooaoao"}).write();
+
+  print(db.get("array").find({"post": "5"}).value());
+
+  print(db.get("array").value());
+
+  print(db.value());
 }
