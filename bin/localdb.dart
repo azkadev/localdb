@@ -5,28 +5,20 @@ import 'package:localdb/file/file.dart';
 void main() async {
   var pathFile = "${Directory.current.path}/data.json";
   var db = jsondb(FileSync(pathFile));
-  db.defaults({
-    "azka": "oke",
-    "array": [
-      {"key": "azka"},
-      {"key": "kunci"},
-      {"key": "bagus"}
-    ],
-    "json": {}
-  }).write();
+  ok("sasa", {"azk": "aa"}).test();
+}
 
-  db.get("array").find({"key": "kunci"}).assign(
-      {"key": "kuncibaru", "post": "5", "data": "oke"}).write();
+class ok {
+  var data;
+  var optionde = {"azka": "ganteng"};
+  var option;
+  ok(this.data, this.option) {
+    option.forEach((key, value) {
+      optionde[key.toString()] = value;
+    });
+  }
 
-  db.get("array").remove({"key": "bagus"}).write();
-
-  db.set("info.links.youtube", "youtube.com").write();
-
-  db.get("array").push({"key": "asaooaoao"}).write();
-
-  print(db.get("array").find({"post": "5"}).value());
-
-  print(db.get("array").value());
-
-  print(db.value());
+  test() {
+    print(optionde);
+  }
 }
