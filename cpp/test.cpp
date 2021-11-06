@@ -3,23 +3,27 @@
 #include </home/azkadev/Music/test/json.hpp>
 #include <fstream>
 #include <typeinfo>
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 
-using json = nlohmann::json;
+using jsondb = nlohmann::json;
 using namespace std;
 
-class JSON
+class OBJECT
 {
 public:
     template <class TYPE>
-    void stringify(TYPE value, int space = 2)
-    {
-        cout << setw(space) << value << '\n';
-    }
-    template <class TYPE>
-    void strinify(TYPE value, int space = 2)
+    TYPE stringify(TYPE value, TYPE replacer = nullptr, int space = 2)
     {
         return setw(space) << value << '\n';
+    }
+
+    template <class TYPE>
+    void strinify(TYPE value, TYPE replacer = nullptr, int space = 2)
+    {
+        return setw(space) << value << '\n';
+    }
+    string test(){
+        return "Azka";
     }
 };
 
@@ -35,45 +39,29 @@ public:
 
 int main()
 {
-    JSON jsonjs;
+    OBJECT JSON;
     CONSOLE console;
     // create a JSON object
-    json j = {};
+    jsondb json = {};
 
     ofstream MyFile("filename.json");
 
     // add new values
-    j["new"]["key"]["value"] = {"another", "list"};
+    json["new"]["key"]["value"] = {"another", "list"};
 
-    j["azka"] = "baru";
-    j["azka"] = "ganti";
-    j["object"] = {"azka", "oke kan"};
+    json["azka"] = "baru";
+    json["azka"] = "ganti";
+    json["object"] = {"azka", "oke kan"};
 
     // count elements
-    auto s = j.size();
-    j["size"] = s;
+    auto s = json.size();
+    json["size"] = s;
 
-    // pretty print with indent of 4 spaces
-    jsonjs.stringify("azkakzkaza");
-
-    int n = 36;
-    char c = 'A';
-    double d = 1.2;
-    if(*(typeid(n).name()) == 'i'){
-        cout << "I am an Integer variable" << endl;
-    }
-    if(*((char *) typeid(d).name()) == 'd'){
-        cout << "I am a Double variable" << endl;
-    }
-    if(*((char *) typeid(c).name()) == 'c'){
-        cout << "I am a Char variable" << endl;
-    }
-
-    // Write to the file
-    MyFile << setw(2) << j << '\n';
+    MyFile << JSON.stringify(json);
 
     // Close the file
     MyFile.close();
+    return 0;
 }
 
 /*
