@@ -1,5 +1,5 @@
 run:
 	git add .
 	git commit -m update
-	echo $token
+	@echo $(value token)
 	git push origin
