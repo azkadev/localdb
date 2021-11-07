@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:localdb/jsondb.dart';
-import 'package:localdb/file/file.dart';
+import '../lib/jsondb.dart';
+import '../lib/file/file.dart';
 
 void main() async {
   var pathFile = "${Directory.current.path}/data.json";

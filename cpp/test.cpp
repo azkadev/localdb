@@ -12,9 +12,9 @@ class OBJECT
 {
 public:
     template <class TYPE>
-    TYPE stringify(TYPE value, TYPE replacer = nullptr, int space = 2)
+    void stringify(TYPE value, TYPE replacer = nullptr, int space = 2)
     {
-        return setw(space) << value << '\n';
+        cout << setw(space) << value << '\n';
     }
 
     template <class TYPE>
@@ -44,7 +44,7 @@ int main()
     // create a JSON object
     jsondb json = {};
 
-    ofstream MyFile("filename.json");
+    ofstream MyFile("/home/azkadev/Desktop/localdb/filename.json");
 
     // add new values
     json["new"]["key"]["value"] = {"another", "list"};
@@ -57,7 +57,7 @@ int main()
     auto s = json.size();
     json["size"] = s;
 
-    MyFile << JSON.stringify(json);
+    MyFile << setw(2) << json << '\n';
 
     // Close the file
     MyFile.close();
