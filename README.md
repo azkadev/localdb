@@ -68,8 +68,7 @@ flutter pub add localdb
 
   ```dart
     import 'dart:io';
-    import 'package:localdb/jsondb.dart';
-    import 'package:localdb/file/file.dart';
+    import 'package:localdb/localdb.dart';
 
     void main() async {
       var pathFile = "${Directory.current.path}/data.json";

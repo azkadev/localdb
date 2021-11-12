@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:localdb/file/file.dart';
-import 'package:localdb/jsondb.dart';
+import "package:localdb/localdb.dart";
 import 'package:path_provider/path_provider.dart';
 
 class Database {
