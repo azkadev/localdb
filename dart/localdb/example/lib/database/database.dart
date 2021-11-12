@@ -19,8 +19,8 @@ class Database {
   }
 
   // ignore: non_constant_identifier_names
-  Future<jsondb> get JsonDb async {
+  Future<JsonDbSync> get JsonDb async {
     var dir = await pathFile();
-    return jsondb(FileSync("$dir${nameFile.toString()}"));
+    return JsonDbSync(FileSync("$dir${nameFile.toString()}"));
   }
 }

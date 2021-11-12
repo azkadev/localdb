@@ -1,42 +1,42 @@
 part of localdb;
 
 // ignore: prefer_typing_uninitialized_variables
-var stateDataFile;
+var stateDataFileSync;
 // ignore: prefer_typing_uninitialized_variables
-var stateDataDefault;
+var stateDataDefaultSync;
 // ignore: prefer_typing_uninitialized_variables
-var stateDataGet;
+var stateDataGetSync;
 // ignore: prefer_typing_uninitialized_variables
-var stateFromGet;
+var stateFromGetSync;
 // ignore: prefer_typing_uninitialized_variables
-var stateDataValue;
+var stateDataValueSync;
 // ignore: prefer_typing_uninitialized_variables
-var stateDataFind;
+var stateDataFindSync;
 
 // ignore: prefer_typing_uninitialized_variables
-var stateSearchFind;
+var stateSearchFindSync;
 
-var boolFromGet = false;
-var boolFromPush = false;
-var boolFromFind = false;
-var boolFromAssign = false;
+var boolFromGetSync = false;
+var boolFromPushSync = false;
+var boolFromFindSync = false;
+var boolFromAssignSync = false;
 
 // ignore: camel_case_types
-class jsondb {
+class JsonDbSync {
   // ignore: prefer_typing_uninitialized_variables, prefer_final_fields
-  var _db;
+  var _dbSync;
   // ignore: prefer_typing_uninitialized_variables, unused_field
-  var _data;
-  jsondb(this._db) {
-    if (switchscript.ifjs(_db.data())) {
-      _data = switchscript.JSON.parse(_db.data());
+  var _dataSync;
+  JsonDbSync(this._dbSync) {
+    if (switchscript.ifjs(_dbSync.data())) {
+      _dataSync = switchscript.JSON.parse(_dbSync.data());
     } else {
-      _data = {};
+      _dataSync = {};
     }
   }
 
   //--! Complete 100%
-  _lastwrite defaults(value) {
+  _lastwriteSync defaults(value) {
     if (switchscript.ifjs(value)) {
       Map json = {};
       if (switchscript.typeof(value) == "string") {
@@ -52,118 +52,118 @@ class jsondb {
       } else if (switchscript.typeof(value) == "object") {
         json = value;
       }
-      if (switchscript.ifjs(_data)) {
+      if (switchscript.ifjs(_dataSync)) {
         json.forEach((key, value) {
-          if (!_data.containsKey(key)) {
-            _data[key] = value;
+          if (!_dataSync.containsKey(key)) {
+            _dataSync[key] = value;
           }
         });
-        stateDataFile = _data;
+        stateDataFileSync = _dataSync;
       } else {
-        stateDataFile = json;
+        stateDataFileSync = json;
       }
     } else {
-      if (switchscript.ifjs(_data)) {
-        stateDataFile = _data;
+      if (switchscript.ifjs(_dataSync)) {
+        stateDataFileSync = _dataSync;
       } else {
-        stateDataFile = {};
+        stateDataFileSync = {};
       }
     }
-    return _lastwrite(_db);
+    return _lastwriteSync(_dbSync);
   }
 
   //--! Complete 100%
-  _gets get(datas) {
-    if (!switchscript.ifjs(stateDataFile)) {
-      stateDataFile = _data ?? {};
+  _getsSync get(datas) {
+    if (!switchscript.ifjs(stateDataFileSync)) {
+      stateDataFileSync = _dataSync ?? {};
     }
     if (switchscript.ifjs(datas) && switchscript.typeof(datas) == "string") {
-      var getData = stateDataFile[datas.toString()];
+      var getData = stateDataFileSync[datas.toString()];
       if (switchscript.RegxExp("string|list|int|double|int|num|bool", "i")
           .exec(switchscript.typeof(getData))) {
-        stateDataGet = datas;
-        stateDataValue = getData;
+        stateDataGetSync = datas;
+        stateDataValueSync = getData;
       } else if (switchscript.ifjs(getData)) {
-        stateDataGet = datas;
-        stateDataValue = getData;
+        stateDataGetSync = datas;
+        stateDataValueSync = getData;
       } else {
-        stateDataGet = false;
-        stateDataValue = null;
+        stateDataGetSync = false;
+        stateDataValueSync = null;
       }
     } else {
-      stateDataGet = false;
-      stateDataValue = null;
+      stateDataGetSync = false;
+      stateDataValueSync = null;
     }
-    stateFromGet = true;
-    boolFromGet = true;
-    return _gets(_db);
+    stateFromGetSync = true;
+    boolFromGetSync = true;
+    return _getsSync(_dbSync);
   }
 
   //--! Complete 50% because manual
-  _lastwrite set(keyData, valueData) {
-    if (!switchscript.ifjs(stateDataFile)) {
-      stateDataFile = _data ?? {};
+  _lastwriteSync set(keyData, valueData) {
+    if (!switchscript.ifjs(stateDataFileSync)) {
+      stateDataFileSync = _dataSync ?? {};
     }
     if (switchscript.ifjs(keyData) &&
         switchscript.ifjs(valueData) &&
         switchscript.typeof(keyData) == "string") {
       var keyDatas = keyData.toString().split(".");
       if (keyDatas.length == 1) {
-        stateDataFile[keyData.toString()] = valueData;
+        stateDataFileSync[keyData.toString()] = valueData;
       } else if (keyDatas.length == 2) {
-        stateDataFile[keyDatas[0].toString()] = {};
-        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()] =
+        stateDataFileSync[keyDatas[0].toString()] = {};
+        stateDataFileSync[keyDatas[0].toString()][keyDatas[1].toString()] =
             valueData;
       } else if (keyDatas.length == 3) {
-        stateDataFile[keyDatas[0].toString()] = {};
-        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()] = {};
-        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+        stateDataFileSync[keyDatas[0].toString()] = {};
+        stateDataFileSync[keyDatas[0].toString()][keyDatas[1].toString()] = {};
+        stateDataFileSync[keyDatas[0].toString()][keyDatas[1].toString()]
             [keyDatas[2].toString()] = valueData;
       } else if (keyDatas.length == 4) {
-        stateDataFile[keyDatas[0].toString()] = {};
-        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()] = {};
-        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+        stateDataFileSync[keyDatas[0].toString()] = {};
+        stateDataFileSync[keyDatas[0].toString()][keyDatas[1].toString()] = {};
+        stateDataFileSync[keyDatas[0].toString()][keyDatas[1].toString()]
             [keyDatas[2].toString()] = {};
-        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+        stateDataFileSync[keyDatas[0].toString()][keyDatas[1].toString()]
             [keyDatas[2].toString()][keyDatas[3].toString()] = valueData;
       } else if (keyDatas.length == 5) {
-        stateDataFile[keyDatas[0].toString()] = {};
-        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()] = {};
-        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+        stateDataFileSync[keyDatas[0].toString()] = {};
+        stateDataFileSync[keyDatas[0].toString()][keyDatas[1].toString()] = {};
+        stateDataFileSync[keyDatas[0].toString()][keyDatas[1].toString()]
             [keyDatas[2].toString()] = {};
-        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+        stateDataFileSync[keyDatas[0].toString()][keyDatas[1].toString()]
             [keyDatas[2].toString()][keyDatas[3].toString()] = {};
-        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+        stateDataFileSync[keyDatas[0].toString()][keyDatas[1].toString()]
                 [keyDatas[2].toString()][keyDatas[3].toString()]
             [keyDatas[4].toString()] = valueData;
       } else if (keyDatas.length == 6) {
-        stateDataFile[keyDatas[0].toString()] = {};
-        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()] = {};
-        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+        stateDataFileSync[keyDatas[0].toString()] = {};
+        stateDataFileSync[keyDatas[0].toString()][keyDatas[1].toString()] = {};
+        stateDataFileSync[keyDatas[0].toString()][keyDatas[1].toString()]
             [keyDatas[2].toString()] = {};
-        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+        stateDataFileSync[keyDatas[0].toString()][keyDatas[1].toString()]
             [keyDatas[2].toString()][keyDatas[3].toString()] = valueData;
       } else if (keyDatas.length == 5) {
-        stateDataFile[keyDatas[0].toString()] = {};
-        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()] = {};
-        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+        stateDataFileSync[keyDatas[0].toString()] = {};
+        stateDataFileSync[keyDatas[0].toString()][keyDatas[1].toString()] = {};
+        stateDataFileSync[keyDatas[0].toString()][keyDatas[1].toString()]
             [keyDatas[2].toString()] = {};
-        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+        stateDataFileSync[keyDatas[0].toString()][keyDatas[1].toString()]
             [keyDatas[2].toString()][keyDatas[3].toString()] = {};
-        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+        stateDataFileSync[keyDatas[0].toString()][keyDatas[1].toString()]
                 [keyDatas[2].toString()][keyDatas[3].toString()]
             [keyDatas[4].toString()] = {};
-        stateDataFile[keyDatas[0].toString()][keyDatas[1].toString()]
+        stateDataFileSync[keyDatas[0].toString()][keyDatas[1].toString()]
                 [keyDatas[2].toString()][keyDatas[3].toString()]
             [keyDatas[4].toString()][keyDatas[4].toString()] = valueData;
       }
     }
-    return _lastwrite(_db);
+    return _lastwriteSync(_dbSync);
   }
 
   value() {
-    if (switchscript.ifjs(_data)) {
-      return _data;
+    if (switchscript.ifjs(_dataSync)) {
+      return _dataSync;
     } else {
       return null;
     }
@@ -171,12 +171,12 @@ class jsondb {
 }
 
 // ignore: camel_case_types
-class _gets {
+class _getsSync {
   // ignore: prefer_typing_uninitialized_variables, prefer_final_fields
   var _db;
   // ignore: prefer_typing_uninitialized_variables, unused_field
   var _data;
-  _gets(this._db) {
+  _getsSync(this._db) {
     if (switchscript.ifjs(_db.data())) {
       _data = switchscript.JSON.parse(_db.data());
     } else {
@@ -185,79 +185,79 @@ class _gets {
   }
 
   //--! Complete 100%
-  _lastwrite push(datas) {
-    if (!switchscript.ifjs(stateDataFile)) {
-      stateDataFile = _data ?? {};
+  _lastwriteSync push(datas) {
+    if (!switchscript.ifjs(stateDataFileSync)) {
+      stateDataFileSync = _data ?? {};
     }
-    if (switchscript.ifjs(datas) && switchscript.ifjs(stateDataGet)) {
-      var getData = stateDataValue;
+    if (switchscript.ifjs(datas) && switchscript.ifjs(stateDataGetSync)) {
+      var getData = stateDataValueSync;
       if (switchscript.typeof(getData) == "list") {
         getData.add(datas);
-        stateDataFile[stateDataGet.toString()] == getData;
+        stateDataFileSync[stateDataGetSync.toString()] == getData;
       }
     }
-    boolFromPush = true;
-    return _lastwrite(_db);
+    boolFromPushSync = true;
+    return _lastwriteSync(_db);
   }
 
-  _finds find(dataFind) {
-    if (!switchscript.ifjs(stateDataFile)) {
-      stateDataFile = _data ?? {};
+  _findsSync find(dataFind) {
+    if (!switchscript.ifjs(stateDataFileSync)) {
+      stateDataFileSync = _data ?? {};
     }
-    if (switchscript.ifjs(stateDataValue)) {
+    if (switchscript.ifjs(stateDataValueSync)) {
       if (switchscript.ifjs(dataFind) &&
           switchscript.typeof(dataFind) == "object") {
-        boolFromFind = true;
-        if (switchscript.typeof(stateDataValue) == "list") {
-          stateDataFind = stateDataValue;
-          stateSearchFind = dataFind;
-          var getData = _findObjectinArray(stateDataValue, dataFind);
-          stateDataValue = getData;
+        boolFromFindSync = true;
+        if (switchscript.typeof(stateDataValueSync) == "list") {
+          stateDataFindSync = stateDataValueSync;
+          stateSearchFindSync = dataFind;
+          var getData = _findObjectinArraySync(stateDataValueSync, dataFind);
+          stateDataValueSync = getData;
         } else {
-          stateDataValue = null;
+          stateDataValueSync = null;
         }
       } else {
-        stateDataValue = null;
+        stateDataValueSync = null;
       }
     } else {
-      stateDataFile = null;
+      stateDataFileSync = null;
     }
-    return _finds(_db);
+    return _findsSync(_db);
   }
 
-  _lastwrite remove(dataFind) {
-    if (!switchscript.ifjs(stateDataFile)) {
-      stateDataFile = _data ?? {};
+  _lastwriteSync remove(dataFind) {
+    if (!switchscript.ifjs(stateDataFileSync)) {
+      stateDataFileSync = _data ?? {};
     }
-    if (switchscript.ifjs(stateDataValue)) {
+    if (switchscript.ifjs(stateDataValueSync)) {
       if (switchscript.ifjs(dataFind) &&
           switchscript.typeof(dataFind) == "object") {
-        if (switchscript.typeof(stateDataValue) == "list" &&
-            stateDataGet != null) {
-          stateDataFile[stateDataGet.toString()] =
-              _unsetObjectInArray(stateDataValue, dataFind);
+        if (switchscript.typeof(stateDataValueSync) == "list" &&
+            stateDataGetSync != null) {
+          stateDataFileSync[stateDataGetSync.toString()] =
+              _unsetObjectInArraySync(stateDataValueSync, dataFind);
         }
       } else {
-        stateDataValue = null;
+        stateDataValueSync = null;
       }
     } else {
-      stateDataFile = null;
+      stateDataFileSync = null;
     }
-    return _lastwrite(_db);
+    return _lastwriteSync(_db);
   }
 
   value() {
-    return stateDataValue;
+    return stateDataValueSync;
   }
 }
 
 // ignore: camel_case_types
-class _finds {
+class _findsSync {
   // ignore: prefer_typing_uninitialized_variables, prefer_final_fields
   var _db;
   // ignore: prefer_typing_uninitialized_variables, unused_field
   var _data;
-  _finds(this._db) {
+  _findsSync(this._db) {
     if (switchscript.ifjs(_db.data())) {
       _data = switchscript.JSON.parse(_db.data());
     } else {
@@ -265,23 +265,23 @@ class _finds {
     }
   }
   //--! Complete 10%
-  _lastwrite assign(dataAssign) {
-    if (!switchscript.ifjs(stateDataFile)) {
-      stateDataFile = _data ?? {};
+  _lastwriteSync assign(dataAssign) {
+    if (!switchscript.ifjs(stateDataFileSync)) {
+      stateDataFileSync = _data ?? {};
     }
-    if (switchscript.typeof(stateDataValue) == "object" && switchscript.typeof(dataAssign) == "object") {
-      if (switchscript.typeof(stateDataFind) == "list" && stateDataGet != null) {
-        stateDataFile[stateDataGet.toString()] =
-            _replaceObjectInArray(stateDataFind, stateSearchFind, dataAssign);
+    if (switchscript.typeof(stateDataValueSync) == "object" && switchscript.typeof(dataAssign) == "object") {
+      if (switchscript.typeof(stateDataFindSync) == "list" && stateDataGetSync != null) {
+        stateDataFileSync[stateDataGetSync.toString()] =
+            _replaceObjectInArraySync(stateDataFindSync, stateSearchFindSync, dataAssign);
       }
     }
-    boolFromAssign = true;
-    return _lastwrite(_db);
+    boolFromAssignSync = true;
+    return _lastwriteSync(_db);
   }
 
   value() {
-    if (boolFromFind) {
-      return stateDataValue;
+    if (boolFromFindSync) {
+      return stateDataValueSync;
     } else {
       return null;
     }
@@ -289,12 +289,12 @@ class _finds {
 }
 
 // ignore: camel_case_types
-class _lastwrite {
+class _lastwriteSync {
   // ignore: prefer_typing_uninitialized_variables, prefer_final_fields
   var _db;
   // ignore: prefer_typing_uninitialized_variables
   var _data;
-  _lastwrite(this._db) {
+  _lastwriteSync(this._db) {
     if (switchscript.ifjs(_db.data())) {
       _data = switchscript.JSON.parse(_db.data());
     } else {
@@ -302,14 +302,14 @@ class _lastwrite {
     }
   }
   write() {
-    if (!switchscript.ifjs(stateDataFile)) {
-      stateDataFile = _data ?? {};
+    if (!switchscript.ifjs(stateDataFileSync)) {
+      stateDataFileSync = _data ?? {};
     }
-    return _db.create(switchscript.JSON.stringify(stateDataFile, null, 2));
+    return _db.create(switchscript.JSON.stringify(stateDataFileSync, null, 2));
   }
 }
 
-_replaceObjectInArray(array, object, newobject) {
+_replaceObjectInArraySync(array, object, newobject) {
   object.forEach((keyIndex, value) {
     var loopValue = object[keyIndex];
     var typeValue = switchscript.typeof(loopValue);
@@ -338,7 +338,7 @@ _replaceObjectInArray(array, object, newobject) {
   return array;
 }
 
-_findObjectinArray(array, object) {
+_findObjectinArraySync(array, object) {
   var data;
   object.forEach((keyIndex, value) {
     var loopValue = object[keyIndex];
@@ -367,7 +367,7 @@ _findObjectinArray(array, object) {
   return data;
 }
 
-_unsetObjectInArray(array, object) {
+_unsetObjectInArraySync(array, object) {
   object.forEach((keyIndex, value) {
     var loopValue = object[keyIndex];
     var typeValue = switchscript.typeof(loopValue);

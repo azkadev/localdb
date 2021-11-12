@@ -10,8 +10,8 @@ import 'dart:io' as io ;
 part 'file/fileasync.dart';
 part 'file/filesync.dart';
 // database
-
-part 'database/jsondb.dart';
+part 'database/jsondbasync.dart';
+part 'database/jsondbsync.dart';
 
 var listExtensionSupport = ["json", "yaml", "txt", "text"];
 
@@ -38,7 +38,7 @@ bool checkExtenstion(text) {
 
 Map information = {
   "name": "localdb",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description":
       "Local Database\nLibrary Untuk Memudahkan developer untuk mengembangkan aplikasi yang ingin menggunakan database local",
   "links": {
