@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:localdb/jsondb.dart';
-import 'package:localdb/file/file.dart';
-import 'package:localdb/javascript/javascript.dart';
+import "package:localdb/localdb.dart";
 import 'widget/header_widget.dart.txt';
 import 'pages/home.dart';
 
@@ -45,9 +43,9 @@ class _FlutterDemoState extends State<SplashSreen> {
         if (getAccounts.length == 0) {
           hashAccount = false;
         } else {
-          var getAccountSigned =
+          Map? getAccountSigned =
               db.get("account").find({"status": "signed"}).value();
-          if (ifjs(getAccountSigned)) {
+          if (getAccountSigned!.isNotEmpty) {
             dataAccount = getAccountSigned;
             hashSign = true;
           } else {

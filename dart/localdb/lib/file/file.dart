@@ -1,9 +1,15 @@
-import 'dart:io';
-import '../javascript/javascript.dart';
-import '../javascript/other.dart';
-import '../javascript/tanggal.dart';
+part of localdb;
 
 var listExtensionSupport = ["json", "yaml", "txt", "text"];
+
+// ignore: non_constant_identifier_names
+acces_data(data, checkUser) {
+  if (data.indexOf(checkUser) > -1) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 checkExtenstion(text) {
   if (text.toString().isNotEmpty) {
@@ -25,15 +31,15 @@ class FileAsync {
   data() async {
     if (RegExp(".*\/", caseSensitive: false).hasMatch(pathFile)) {
       if (pathFile.toString().split(".").length > 1) {
-        if (await File(pathFile).exists()) {
-          var getFile = await File(pathFile).readAsString();
-          if (ifjs(getFile)) {
-            return JSON.parse(getFile);
+        if (await io.File(pathFile).exists()) {
+          var getFile = await io.File(pathFile).readAsString();
+          if (switchscript.ifjs(getFile)) {
+            return switchscript.JSON.parse(getFile);
           } else {
             return {};
           }
         } else {
-          File(pathFile).create();
+          io.File(pathFile).create();
           return {};
         }
       } else {
@@ -48,12 +54,14 @@ class FileAsync {
   create(value) async {
     if (RegExp(".*\/", caseSensitive: false).hasMatch(pathFile)) {
       if (pathFile.toString().split(".").length > 1) {
-        if (await File(pathFile).exists()) {
-          await File(pathFile).writeAsString(JSON.stringify(value, null, 1));
+        if (await io.File(pathFile).exists()) {
+          await io.File(pathFile)
+              .writeAsString(switchscript.JSON.stringify(value, null, 1));
           return true;
         } else {
-          File(pathFile).create();
-          await File(pathFile).writeAsString(JSON.stringify(value, null, 1));
+          io.File(pathFile).create();
+          await io.File(pathFile)
+              .writeAsString(switchscript.JSON.stringify(value, null, 1));
           return true;
         }
       } else {
@@ -75,15 +83,15 @@ class FileSync {
       var splitText = pathFile.toString().split(".");
       if (splitText.length > 1) {
         if (checkExtenstion(splitText.last.toString().toLowerCase())) {
-          if (File(pathFile).existsSync()) {
-            var getFile = File(pathFile).readAsStringSync();
-            if (ifjs(getFile)) {
+          if (io.File(pathFile).existsSync()) {
+            var getFile = io.File(pathFile).readAsStringSync();
+            if (switchscript.ifjs(getFile)) {
               return getFile;
             } else {
               return false;
             }
           } else {
-            File(pathFile).createSync();
+            io.File(pathFile).createSync();
             return false;
           }
         } else {
@@ -101,12 +109,12 @@ class FileSync {
   create(value) {
     if (RegExp(".*\/", caseSensitive: false).hasMatch(pathFile)) {
       if (pathFile.toString().split(".").length > 1) {
-        if (File(pathFile).existsSync()) {
-          File(pathFile).writeAsStringSync(value);
+        if (io.File(pathFile).existsSync()) {
+          io.File(pathFile).writeAsStringSync(value);
           return true;
         } else {
-          File(pathFile).createSync();
-          File(pathFile).writeAsStringSync(value);
+          io.File(pathFile).createSync();
+          io.File(pathFile).writeAsStringSync(value);
           return true;
         }
       } else {
@@ -121,12 +129,14 @@ class FileSync {
     Map json = {};
     if (RegExp(".*\/", caseSensitive: false).hasMatch(pathFile)) {
       if (pathFile.toString().split(".").length > 1) {
-        if (File(pathFile).existsSync()) {
-          var dateCreated =
-              tanggal(File(pathFile).lastAccessedSync().millisecondsSinceEpoch);
-          var dateUpdate =
-              tanggal(File(pathFile).lastModifiedSync().millisecondsSinceEpoch);
-          var stat = File(pathFile).statSync();
+        if (io.File(pathFile).existsSync()) {
+          var dateCreated = switchscript
+              .date(io.File(pathFile).lastAccessedSync().millisecondsSinceEpoch)
+              .toJson();
+          var dateUpdate = switchscript
+              .date(io.File(pathFile).lastModifiedSync().millisecondsSinceEpoch)
+              .toJson();
+          var stat = io.File(pathFile).statSync();
           json["date_created"] = dateCreated;
           json["date_update"] = dateUpdate;
           json["detail"] = {
@@ -139,12 +149,14 @@ class FileSync {
           };
           return json;
         } else {
-          File(pathFile).createSync();
-          var dateCreated =
-              tanggal(File(pathFile).lastAccessedSync().millisecondsSinceEpoch);
-          var dateUpdate =
-              tanggal(File(pathFile).lastModifiedSync().millisecondsSinceEpoch);
-          var stat = File(pathFile).statSync();
+          io.File(pathFile).createSync();
+          var dateCreated = switchscript
+              .date(io.File(pathFile).lastAccessedSync().millisecondsSinceEpoch)
+              .toJson();
+          var dateUpdate = switchscript
+              .date(io.File(pathFile).lastModifiedSync().millisecondsSinceEpoch)
+              .toJson();
+          var stat = io.File(pathFile).statSync();
           json["date_created"] = dateCreated;
           json["date_update"] = dateUpdate;
           json["detail"] = {
@@ -167,7 +179,7 @@ class FileSync {
 
   rename(newPathFile) {
     if (newPathFile.toString().isNotEmpty) {
-      File(pathFile).renameSync(newPathFile);
+      io.File(pathFile).renameSync(newPathFile);
       return true;
     } else {
       return false;
@@ -176,7 +188,7 @@ class FileSync {
 
   copy(newPathFile) {
     if (newPathFile.toString().isNotEmpty) {
-      File(pathFile).copySync(newPathFile);
+      io.File(pathFile).copySync(newPathFile);
       return true;
     } else {
       return false;
@@ -184,11 +196,11 @@ class FileSync {
   }
 
   delete() {
-    File(pathFile).deleteSync();
+    io.File(pathFile).deleteSync();
     return true;
   }
-  length() {
-    return File(pathFile).openSync();
-  }
 
+  length() {
+    return io.File(pathFile).openSync();
+  }
 }

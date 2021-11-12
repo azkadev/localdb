@@ -1,4 +1,4 @@
-import 'javascript/javascript.dart';
+part of localdb;
 
 // ignore: prefer_typing_uninitialized_variables
 var stateDataFile;
@@ -28,8 +28,8 @@ class jsondb {
   // ignore: prefer_typing_uninitialized_variables, unused_field
   var _data;
   jsondb(this._db) {
-    if (ifjs(_db.data())) {
-      _data = JSON.parse(_db.data());
+    if (switchscript.ifjs(_db.data())) {
+      _data = switchscript.JSON.parse(_db.data());
     } else {
       _data = {};
     }
@@ -37,22 +37,22 @@ class jsondb {
 
   //--! Complete 100%
   _lastwrite defaults(value) {
-    if (ifjs(value)) {
+    if (switchscript.ifjs(value)) {
       Map json = {};
-      if (typeof(value) == "string") {
+      if (switchscript.typeof(value) == "string") {
         for (var i = 0; i < value.toString().length; i++) {
           var loopData = value[i];
           json[i.toString()] = loopData;
         }
-      } else if (typeof(value) == "list") {
+      } else if (switchscript.typeof(value) == "list") {
         for (var i = 0; i < value.length; i++) {
           var loopData = value[i];
           json[i.toString()] = loopData;
         }
-      } else if (typeof(value) == "object") {
+      } else if (switchscript.typeof(value) == "object") {
         json = value;
       }
-      if (ifjs(_data)) {
+      if (switchscript.ifjs(_data)) {
         json.forEach((key, value) {
           if (!_data.containsKey(key)) {
             _data[key] = value;
@@ -63,7 +63,7 @@ class jsondb {
         stateDataFile = json;
       }
     } else {
-      if (ifjs(_data)) {
+      if (switchscript.ifjs(_data)) {
         stateDataFile = _data;
       } else {
         stateDataFile = {};
@@ -74,16 +74,16 @@ class jsondb {
 
   //--! Complete 100%
   _gets get(datas) {
-    if (!ifjs(stateDataFile)) {
+    if (!switchscript.ifjs(stateDataFile)) {
       stateDataFile = _data ?? {};
     }
-    if (ifjs(datas) && typeof(datas) == "string") {
+    if (switchscript.ifjs(datas) && switchscript.typeof(datas) == "string") {
       var getData = stateDataFile[datas.toString()];
-      if (RegxExp("string|list|int|double|int|num|bool", "i")
-          .exec(typeof(getData))) {
+      if (switchscript.RegxExp("string|list|int|double|int|num|bool", "i")
+          .exec(switchscript.typeof(getData))) {
         stateDataGet = datas;
         stateDataValue = getData;
-      } else if (ifjs(getData)) {
+      } else if (switchscript.ifjs(getData)) {
         stateDataGet = datas;
         stateDataValue = getData;
       } else {
@@ -101,10 +101,12 @@ class jsondb {
 
   //--! Complete 50% because manual
   _lastwrite set(keyData, valueData) {
-    if (!ifjs(stateDataFile)) {
+    if (!switchscript.ifjs(stateDataFile)) {
       stateDataFile = _data ?? {};
     }
-    if (ifjs(keyData) && ifjs(valueData) && typeof(keyData) == "string") {
+    if (switchscript.ifjs(keyData) &&
+        switchscript.ifjs(valueData) &&
+        switchscript.typeof(keyData) == "string") {
       var keyDatas = keyData.toString().split(".");
       if (keyDatas.length == 1) {
         stateDataFile[keyData.toString()] = valueData;
@@ -160,7 +162,7 @@ class jsondb {
   }
 
   value() {
-    if (ifjs(_data)) {
+    if (switchscript.ifjs(_data)) {
       return _data;
     } else {
       return null;
@@ -174,8 +176,8 @@ class _gets {
   // ignore: prefer_typing_uninitialized_variables, unused_field
   var _data;
   _gets(this._db) {
-    if (ifjs(_db.data())) {
-      _data = JSON.parse(_db.data());
+    if (switchscript.ifjs(_db.data())) {
+      _data = switchscript.JSON.parse(_db.data());
     } else {
       _data = {};
     }
@@ -183,12 +185,12 @@ class _gets {
 
   //--! Complete 100%
   _lastwrite push(datas) {
-    if (!ifjs(stateDataFile)) {
+    if (!switchscript.ifjs(stateDataFile)) {
       stateDataFile = _data ?? {};
     }
-    if (ifjs(datas) && ifjs(stateDataGet)) {
+    if (switchscript.ifjs(datas) && switchscript.ifjs(stateDataGet)) {
       var getData = stateDataValue;
-      if (typeof(getData) == "list") {
+      if (switchscript.typeof(getData) == "list") {
         getData.add(datas);
         stateDataFile[stateDataGet.toString()] == getData;
       }
@@ -198,13 +200,14 @@ class _gets {
   }
 
   _finds find(dataFind) {
-    if (!ifjs(stateDataFile)) {
+    if (!switchscript.ifjs(stateDataFile)) {
       stateDataFile = _data ?? {};
     }
-    if (ifjs(stateDataValue)) {
-      if (ifjs(dataFind) && typeof(dataFind) == "object") {
+    if (switchscript.ifjs(stateDataValue)) {
+      if (switchscript.ifjs(dataFind) &&
+          switchscript.typeof(dataFind) == "object") {
         boolFromFind = true;
-        if (typeof(stateDataValue) == "list") {
+        if (switchscript.typeof(stateDataValue) == "list") {
           stateDataFind = stateDataValue;
           stateSearchFind = dataFind;
           var getData = _findObjectinArray(stateDataValue, dataFind);
@@ -222,12 +225,14 @@ class _gets {
   }
 
   _lastwrite remove(dataFind) {
-    if (!ifjs(stateDataFile)) {
+    if (!switchscript.ifjs(stateDataFile)) {
       stateDataFile = _data ?? {};
     }
-    if (ifjs(stateDataValue)) {
-      if (ifjs(dataFind) && typeof(dataFind) == "object") {
-        if (typeof(stateDataValue) == "list" && stateDataGet != null) {
+    if (switchscript.ifjs(stateDataValue)) {
+      if (switchscript.ifjs(dataFind) &&
+          switchscript.typeof(dataFind) == "object") {
+        if (switchscript.typeof(stateDataValue) == "list" &&
+            stateDataGet != null) {
           stateDataFile[stateDataGet.toString()] =
               _unsetObjectInArray(stateDataValue, dataFind);
         }
@@ -251,19 +256,19 @@ class _finds {
   // ignore: prefer_typing_uninitialized_variables, unused_field
   var _data;
   _finds(this._db) {
-    if (ifjs(_db.data())) {
-      _data = JSON.parse(_db.data());
+    if (switchscript.ifjs(_db.data())) {
+      _data = switchscript.JSON.parse(_db.data());
     } else {
       _data = {};
     }
   }
   //--! Complete 10%
   _lastwrite assign(dataAssign) {
-    if (!ifjs(stateDataFile)) {
+    if (!switchscript.ifjs(stateDataFile)) {
       stateDataFile = _data ?? {};
     }
-    if (typeof(stateDataValue) == "object" && typeof(dataAssign) == "object") {
-      if (typeof(stateDataFind) == "list" && stateDataGet != null) {
+    if (switchscript.typeof(stateDataValue) == "object" && switchscript.typeof(dataAssign) == "object") {
+      if (switchscript.typeof(stateDataFind) == "list" && stateDataGet != null) {
         stateDataFile[stateDataGet.toString()] =
             _replaceObjectInArray(stateDataFind, stateSearchFind, dataAssign);
       }
@@ -288,24 +293,24 @@ class _lastwrite {
   // ignore: prefer_typing_uninitialized_variables
   var _data;
   _lastwrite(this._db) {
-    if (ifjs(_db.data())) {
-      _data = JSON.parse(_db.data());
+    if (switchscript.ifjs(_db.data())) {
+      _data = switchscript.JSON.parse(_db.data());
     } else {
       _data = {};
     }
   }
   write() {
-    if (!ifjs(stateDataFile)) {
+    if (!switchscript.ifjs(stateDataFile)) {
       stateDataFile = _data ?? {};
     }
-    return _db.create(JSON.stringify(stateDataFile, null, 2));
+    return _db.create(switchscript.JSON.stringify(stateDataFile, null, 2));
   }
 }
 
 _replaceObjectInArray(array, object, newobject) {
   object.forEach((keyIndex, value) {
     var loopValue = object[keyIndex];
-    var typeValue = typeof(loopValue);
+    var typeValue = switchscript.typeof(loopValue);
     var index = (typeValue == "regexp")
         ? () {
             for (var i = 0; i < array.length; i++) {
@@ -335,7 +340,7 @@ _findObjectinArray(array, object) {
   var data;
   object.forEach((keyIndex, value) {
     var loopValue = object[keyIndex];
-    var typeValue = typeof(loopValue);
+    var typeValue = switchscript.typeof(loopValue);
     var index = (typeValue == "regexp")
         ? () {
             for (var i = 0; i < array.length; i++) {
@@ -363,7 +368,7 @@ _findObjectinArray(array, object) {
 _unsetObjectInArray(array, object) {
   object.forEach((keyIndex, value) {
     var loopValue = object[keyIndex];
-    var typeValue = typeof(loopValue);
+    var typeValue = switchscript.typeof(loopValue);
     var index = (typeValue == "regexp")
         ? () {
             for (var i = 0; i < array.length; i++) {

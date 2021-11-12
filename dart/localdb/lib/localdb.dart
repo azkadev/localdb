@@ -1,3 +1,17 @@
+// ignore_for_file: unused_import
+library localdb;
+
+import "package:switchscript/switchscript.dart" as switchscript;
+import 'dart:io' as io ;
+
+// file
+part 'file/file.dart';
+
+// database
+
+part 'database/jsondb.dart';
+
+
 Map information = {
   "name": "localdb",
   "version": "0.0.1",

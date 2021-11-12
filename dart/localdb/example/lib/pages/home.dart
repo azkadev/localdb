@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:localdb/jsondb.dart';
-import 'package:localdb/file/file.dart';
-import 'package:localdb/javascript/javascript.dart';
+import "package:localdb/localdb.dart";
 
 class Home extends StatefulWidget {
   const Home({Key? key, required this.dataAccount}) : super(key: key);

@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:localdb/jsondb.dart';
-import 'package:localdb/file/file.dart';
-import 'package:localdb/javascript/javascript.dart';
+import "package:localdb/localdb.dart";
 
 class Signins extends StatefulWidget {
   const Signins({Key? key, required this.dataAccounts}) : super(key: key);
