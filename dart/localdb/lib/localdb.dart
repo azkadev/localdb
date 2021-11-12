@@ -1,16 +1,40 @@
 // ignore_for_file: unused_import
 library localdb;
 
+import 'dart:math';
+
 import "package:switchscript/switchscript.dart" as switchscript;
 import 'dart:io' as io ;
 
 // file
-part 'file/file.dart';
-
+part 'file/fileasync.dart';
+part 'file/filesync.dart';
 // database
 
 part 'database/jsondb.dart';
 
+var listExtensionSupport = ["json", "yaml", "txt", "text"];
+
+// ignore: non_constant_identifier_names
+bool acces_data(data, checkUser) {
+  if (data.indexOf(checkUser) > -1) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool checkExtenstion(text) {
+  if (text.toString().isNotEmpty) {
+    if (acces_data(listExtensionSupport, text.toString().toLowerCase())) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
 
 Map information = {
   "name": "localdb",

@@ -170,6 +170,7 @@ class jsondb {
   }
 }
 
+// ignore: camel_case_types
 class _gets {
   // ignore: prefer_typing_uninitialized_variables, prefer_final_fields
   var _db;
@@ -250,6 +251,7 @@ class _gets {
   }
 }
 
+// ignore: camel_case_types
 class _finds {
   // ignore: prefer_typing_uninitialized_variables, prefer_final_fields
   var _db;

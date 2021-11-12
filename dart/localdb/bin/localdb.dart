@@ -1,6 +1,8 @@
-import 'package:localdb/file/file.dart';
+import 'dart:io';
 import 'package:localdb/localdb.dart';
 
-void main() {
-  var sfile = FileSync("./");
+void main() async {
+  var pathFile = "${Directory.current.path}/data.json";
+  var db = FileSync(pathFile);
+  print(db.writeString("assa"));
 }
