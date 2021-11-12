@@ -72,7 +72,7 @@ flutter pub add localdb
 
     void main() async {
       var pathFile = "${Directory.current.path}/data.json";
-      var db = jsondb(FileSync(pathFile));
+      var db = JsonDbSync(FileSync(pathFile));
       db.defaults({
         "azka": "oke",
         "array": [
